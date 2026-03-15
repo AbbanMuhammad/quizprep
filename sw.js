@@ -3,7 +3,7 @@
 //  Stage 8: Offline support + caching
 // =============================================
 
-const CACHE_VERSION = 'quizprep-v1';
+const CACHE_VERSION = 'quizprep-v2';
 
 const FILES_TO_CACHE = [
   './',
