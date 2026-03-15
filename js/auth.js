@@ -184,7 +184,7 @@ function updateStrengthUI(password) {
 //  6. PASSWORD VISIBILITY TOGGLE
 // ─────────────────────────────────────────────
 
-function togglePassword(inputId, btn) {
+window.togglePassword = function(inputId, btn) {
   const input = document.getElementById(inputId);
   if (!input) return;
 
@@ -373,3 +373,14 @@ function initLogin() {
     window.location.href = redirect;
   });
 }
+
+// ─────────────────────────────────────────────
+//  AUTO-INITIALISE
+//  Detect which page we're on and run the
+//  right init function automatically
+// ─────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('loginBtn'))    initLogin();
+  if (document.getElementById('registerBtn')) initRegister();
+});
