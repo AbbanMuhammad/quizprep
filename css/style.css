@@ -5,9 +5,9 @@
 
 /* ── 1. Design Tokens ── */
 :root {
-  /* Brand colours */
-  --color-primary:       #1A3C5E;
-  --color-primary-light: #2a5a8f;
+   /* Brand colours */
+  --color-primary:       #1A5E3A;
+  --color-primary-light: #2a8f57;
   --color-accent:        #F5A623;
   --color-accent-dark:   #d4891a;
 
