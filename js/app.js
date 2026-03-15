@@ -170,3 +170,75 @@ window.matchMedia('(prefers-color-scheme: dark)')
 // ─────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', updateNav);
+
+// ─────────────────────────────────────────────
+//  SERVICE WORKER REGISTRATION
+// ─────────────────────────────────────────────
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('./sw.js')
+      .then(reg => {
+        console.log('[App] SW registered:', reg.scope);
+
+        reg.addEventListener('updatefound', () => {
+          const newSW = reg.installing;
+          newSW.addEventListener('statechange', () => {
+            if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateBanner();
+            }
+          });
+        });
+      })
+      .catch(err => console.error('[App] SW registration failed:', err));
+  });
+}
+
+function showUpdateBanner() {
+  if (document.getElementById('update-banner')) return;
+
+  const banner = document.createElement('div');
+  banner.id = 'update-banner';
+  banner.style.cssText = `
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1A5E3A;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    white-space: nowrap;
+  `;
+  banner.innerHTML = `
+    <span>🎉 A new version is available!</span>
+    <button onclick="location.reload()" style="
+      background: #F5A623;
+      color: #1A5E3A;
+      border: none;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13px;
+    ">Update</button>
+    <button onclick="this.parentElement.remove()" style="
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0;
+    ">✕</button>
+  `;
+  document.body.appendChild(banner);
+}

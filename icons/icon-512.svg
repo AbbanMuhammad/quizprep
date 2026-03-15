@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="102" fill="#1A5E3A"/>
+  <text x="256" y="310" font-family="sans-serif" font-weight="bold"
+        font-size="196" fill="#F5A623" text-anchor="middle">QP</text>
+</svg>
