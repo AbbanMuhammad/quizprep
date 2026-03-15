@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Results | QuizPrep</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/history.css">
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
+      <!-- app.js fills in the user nav -->
+    </div>
+  </nav>
+
+  <!-- ── Page Header ── -->
+  <section class="history-header">
+    <div class="container">
+      <h1 class="history-header__title">My Results</h1>
+      <p class="history-header__sub" id="historySubtitle">
+        Loading your history...
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Summary Stats ── -->
+  <section class="hist-stats">
+    <div class="container hist-stats__grid">
+
+      <div class="hist-stat-card">
+        <span class="hist-stat__value" id="hsTotalQuizzes">0</span>
+        <span class="hist-stat__label">Quizzes Taken</span>
+      </div>
+
+      <div class="hist-stat-card">
+        <span class="hist-stat__value" id="hsAvgScore">0%</span>
+        <span class="hist-stat__label">Average Score</span>
+      </div>
+
+      <div class="hist-stat-card">
+        <span class="hist-stat__value" id="hsBestScore">0%</span>
+        <span class="hist-stat__label">Best Score</span>
+      </div>
+
+      <div class="hist-stat-card">
+        <span class="hist-stat__value" id="hsFavSubject">—</span>
+        <span class="hist-stat__label">Most Practised</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Filters & Table ── -->
+  <main class="section history-main">
+    <div class="container">
+
+      <!-- Controls row -->
+      <div class="history-controls">
+
+        <!-- Subject filter -->
+        <select class="history-select" id="subjectFilter">
+          <option value="all">All Subjects</option>
+          <option value="mathematics">Mathematics</option>
+          <option value="english">English Language</option>
+          <option value="biology">Biology</option>
+          <option value="chemistry">Chemistry</option>
+          <option value="physics">Physics</option>
+          <option value="government">Government</option>
+          <option value="literature">Literature in English</option>
+          <option value="economics">Economics</option>
+        </select>
+
+        <!-- Sort order -->
+        <select class="history-select" id="sortOrder">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="highest">Highest Score</option>
+          <option value="lowest">Lowest Score</option>
+        </select>
+
+        <!-- Clear history -->
+        <button class="btn btn--danger" id="clearBtn">
+          Clear History
+        </button>
+
+      </div>
+
+      <!-- Results table -->
+      <div class="history-table-wrap">
+        <table class="history-table" id="historyTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Subject</th>
+              <th>Score</th>
+              <th>Result</th>
+              <th>Time Taken</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <!-- JS fills this -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty state -->
+      <div class="history-empty hidden" id="historyEmpty">
+        <div class="history-empty__icon">📋</div>
+        <h3 class="history-empty__title">No results yet</h3>
+        <p class="history-empty__text">
+          Complete a quiz to see your history here.
+        </p>
+        <a href="quiz-select.html" class="btn btn--primary">
+          Start a Quiz
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
+      <p class="footer__copy">&copy; 2025 QuizPrep. Built for Nigerian students.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>

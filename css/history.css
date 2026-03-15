@@ -1,0 +1,251 @@
+/* =============================================
+   QUIZPREP — Score History Page
+   Stage 6
+   ============================================= */
+
+/* ── Page Header ── */
+.history-header {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-light) 100%
+  );
+  color: var(--color-white);
+  padding: var(--space-xl) 0 var(--space-lg);
+  text-align: center;
+}
+
+.history-header__title {
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  margin-bottom: var(--space-xs);
+}
+
+.history-header__sub {
+  font-size: var(--fs-base);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Summary Stats Grid ── */
+.hist-stats {
+  background: var(--color-bg-alt);
+  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hist-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-md);
+}
+
+.hist-stat-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform var(--transition);
+}
+
+.hist-stat-card:hover { transform: translateY(-2px); }
+
+.hist-stat__value {
+  display: block;
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.hist-stat__label {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Main Section ── */
+.history-main { background: var(--color-bg); }
+
+/* ── Controls Row ── */
+.history-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+
+.history-select {
+  padding: 0.6rem 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color var(--transition);
+  outline: none;
+}
+
+.history-select:focus {
+  border-color: var(--color-primary);
+}
+
+/* Danger button for clear */
+.btn--danger {
+  background: transparent;
+  color: #dc2626;
+  border: 2px solid #fca5a5;
+  margin-left: auto;
+}
+
+.btn--danger:hover {
+  background: #fee2e2;
+  border-color: #dc2626;
+}
+
+/* ── Table ── */
+.history-table-wrap {
+  overflow-x: auto;           /* scroll horizontally on small screens */
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  white-space: nowrap;        /* prevent text wrapping in cells */
+}
+
+/* Header row */
+.history-table thead tr {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.history-table th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Body rows */
+.history-table tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition);
+}
+
+.history-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.history-table tbody tr:hover {
+  background: var(--color-bg-alt);
+}
+
+.history-table td {
+  padding: 0.85rem 1rem;
+  color: var(--color-text);
+  vertical-align: middle;
+}
+
+/* Row number column */
+.history-table td:first-child {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+/* Subject column — capitalised */
+.td-subject {
+  font-weight: 600;
+  color: var(--color-primary) !important;
+  text-transform: capitalize;
+}
+
+/* Score column */
+.td-score {
+  font-weight: 700;
+  font-size: var(--fs-base) !important;
+}
+
+/* Result badge */
+.result-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.result-badge.excellent {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.result-badge.good {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.result-badge.poor {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Retake link in action column */
+.retake-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0;
+  transition: color var(--transition);
+}
+
+.retake-link:hover {
+  color: var(--color-primary-light);
+}
+
+/* ── Empty State ── */
+.history-empty {
+  text-align: center;
+  padding: var(--space-2xl) 0;
+}
+
+.history-empty__icon {
+  font-size: 3.5rem;
+  margin-bottom: var(--space-md);
+}
+
+.history-empty__title {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.history-empty__text {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .history-controls    { flex-direction: column; align-items: stretch; }
+  .btn--danger         { margin-left: 0; }
+  .hist-stats__grid    { grid-template-columns: 1fr 1fr; }
+}

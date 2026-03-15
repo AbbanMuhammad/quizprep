@@ -26,10 +26,17 @@ function updateNav() {
   if (existing) existing.remove();
 
   if (user) {
-    // Logged in — show name and logout button
     const userEl = document.createElement('div');
     userEl.className = 'nav__user';
     userEl.innerHTML = `
+      <a href="history.html"
+         style="color:rgba(255,255,255,0.85);
+                font-size:var(--fs-sm);
+                font-weight:600;
+                text-decoration:none;
+                margin-right:var(--space-sm);">
+        My Results
+      </a>
       <span class="nav__username">
         Hi, <span>${user.name.split(' ')[0]}</span>
       </span>
@@ -38,10 +45,9 @@ function updateNav() {
       </button>`;
     navInner.appendChild(userEl);
   } else {
-    // Not logged in — show Get Started
     const link = document.createElement('a');
-    link.href      = 'login.html';
-    link.className = 'btn btn--outline';
+    link.href        = 'login.html';
+    link.className   = 'btn btn--outline';
     link.textContent = 'Get Started';
     navInner.appendChild(link);
   }

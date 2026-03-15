@@ -25,6 +25,23 @@ const results = JSON.parse(stored);
 // Destructure for easier access throughout the file
 const { subject, questions, userAnswers, score, total, timeTaken } = results;
 
+// ── Save this result to history ──────────────
+// Add js/app.js and js/history.js before results.js in results.html
+// so saveResult() and getCurrentUser() are available here
+const _user = JSON.parse(localStorage.getItem('qp_current') || 'null');
+if (_user) {
+  const _all = JSON.parse(localStorage.getItem('qp_history') || '[]');
+  _all.push({
+    userId:    _user.id,
+    subject,
+    score,
+    total,
+    percent:   Math.round((score / total) * 100),
+    timeTaken,
+    date:      new Date().toISOString()
+  });
+  localStorage.setItem('qp_history', JSON.stringify(_all));
+}
 
 // ─────────────────────────────────────────────
 //  2. HELPER — Format seconds as m:ss
