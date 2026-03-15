@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz | QuizPrep</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
+      <button class="btn btn--outline" id="quitBtn">Quit Quiz</button>
+    </div>
+  </nav>
+
+  <!-- ── Quiz Top Bar ── -->
+  <div class="quiz-topbar">
+    <div class="container quiz-topbar__inner">
+
+      <!-- Subject name filled by JS -->
+      <span class="quiz-topbar__subject" id="subjectLabel">Loading...</span>
+
+      <!-- Timer — turns red below 5 minutes -->
+      <div class="timer" id="timer">
+        <span class="timer__icon">⏱</span>
+        <span class="timer__display" id="timerDisplay">30:00</span>
+      </div>
+
+    </div>
+
+    <!-- Progress bar -->
+    <div class="quiz-progress">
+      <div class="quiz-progress__fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- ── Main Quiz Area ── -->
+  <main class="quiz-main">
+    <div class="container quiz-card">
+
+      <!-- Question counter -->
+      <p class="quiz-counter" id="questionCounter">Question 1 of 10</p>
+
+      <!-- Question text — filled by JS -->
+      <h2 class="quiz-question" id="questionText">Loading question...</h2>
+
+      <!-- Answer options — filled by JS -->
+      <div class="quiz-options" id="optionsContainer">
+        <!-- JS renders 4 buttons here -->
+      </div>
+
+      <!-- Navigation buttons -->
+      <div class="quiz-nav">
+        <button class="btn btn--outline-dark" id="prevBtn" disabled>
+          ← Previous
+        </button>
+        <button class="btn btn--primary" id="nextBtn">
+          Next →
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── Submit Confirmation Modal ── -->
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal">
+      <h3 class="modal__title">Submit Quiz?</h3>
+      <p class="modal__text" id="modalText">
+        You have answered all questions. Ready to see your score?
+      </p>
+      <div class="modal__btns">
+        <button class="btn btn--outline-dark" id="modalCancel">
+          Go Back
+        </button>
+        <button class="btn btn--primary" id="modalConfirm">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load questions first, then the quiz engine -->
+  <script src="data/questions.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>
