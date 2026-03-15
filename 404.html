@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found | QuizPrep</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1A5E3A">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .notfound {
+      min-height: calc(100vh - 64px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-bg-alt);
+      padding: var(--space-xl) var(--space-sm);
+    }
+    .notfound__inner {
+      text-align: center;
+      max-width: 480px;
+    }
+    .notfound__code {
+      font-size: 8rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      line-height: 1;
+      margin-bottom: var(--space-sm);
+      opacity: 0.15;
+    }
+    .notfound__icon {
+      font-size: 4rem;
+      margin-bottom: var(--space-md);
+      margin-top: calc(-5rem);
+    }
+    .notfound__title {
+      font-size: var(--fs-2xl);
+      font-weight: 800;
+      color: var(--color-primary);
+      margin-bottom: var(--space-sm);
+    }
+    .notfound__text {
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-xl);
+      line-height: 1.7;
+    }
+    .notfound__btns {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="nav__logo" aria-label="QuizPrep home">
+        Quiz<span>Prep</span>
+      </a>
+    </div>
+  </nav>
+
+  <main class="notfound">
+    <div class="notfound__inner">
+      <div class="notfound__code">404</div>
+      <div class="notfound__icon">🔍</div>
+      <h1 class="notfound__title">Page Not Found</h1>
+      <p class="notfound__text">
+        The page you are looking for does not exist or may have been moved.
+        Head back home and continue your exam preparation.
+      </p>
+      <div class="notfound__btns">
+        <a href="index.html" class="btn btn--primary">Go Home</a>
+        <a href="quiz-select.html" class="btn btn--outline-dark">
+          Start a Quiz
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

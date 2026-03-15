@@ -14,6 +14,7 @@ const FILES_TO_CACHE = [
   './login.html',
   './register.html',
   './history.html',
+  './404.html',
   './css/style.css',
   './css/quiz-select.css',
   './css/quiz.css',

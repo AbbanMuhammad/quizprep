@@ -162,9 +162,11 @@ function renderQuestion() {
 
     // Build inner HTML: letter badge + option text
     btn.innerHTML = `
-      <span class="option-label">${OPTION_LETTERS[index]}</span>
-      <span>${optionText}</span>
-    `;
+  <span class="option-label">${OPTION_LETTERS[index]}</span>
+  <span>${optionText}</span>
+`;
+btn.setAttribute('aria-pressed',
+  userAnswers[currentIndex] === index ? 'true' : 'false');
 
     btn.addEventListener('click', () => selectOption(index));
     optionsContainer.appendChild(btn);
@@ -189,13 +191,12 @@ function renderQuestion() {
 // ─────────────────────────────────────────────
 
 function selectOption(selectedIndex) {
-  // Save the user's answer
   userAnswers[currentIndex] = selectedIndex;
 
-  // Update the visual selected state on all option buttons
   const allOptions = optionsContainer.querySelectorAll('.option-btn');
   allOptions.forEach((btn, i) => {
     btn.classList.toggle('selected', i === selectedIndex);
+    btn.setAttribute('aria-pressed', i === selectedIndex ? 'true' : 'false');
   });
 }
 

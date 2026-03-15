@@ -1,147 +1,220 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Choose a subject and start your CBT practice quiz.">
-  <title>Select a Subject | QuizPrep</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/quiz-select.css">
-  <script src="js/app.js"></script>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1A5E3A">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="Choose a subject and start your CBT practice quiz on QuizPrep."
+        />
+        <meta property="og:title" content="Select a Subject | QuizPrep" />
+        <meta
+            property="og:description"
+            content="Choose from Mathematics, English, Biology, Chemistry and more."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="icons/icon-512.svg" />
+        <title>Select a Subject | QuizPrep</title>
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/quiz-select.css" />
+        <script src="js/app.js"></script>
+        <link rel="manifest" href="manifest.json" />
+        <meta name="theme-color" content="#1A5E3A" />
+    </head>
+    <body>
+        <!-- ── Navigation ── -->
+        <nav class="nav">
+            <div class="container nav__inner">
+                <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
+                <a href="login.html" class="btn btn--outline">Get Started</a>
+            </div>
+        </nav>
 
-  <!-- ── Navigation ── -->
-  <nav class="nav">
-    <div class="container nav__inner">
-      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
-      <a href="login.html" class="btn btn--outline">Get Started</a>
-    </div>
-  </nav>
+        <!-- ── Page Header ── -->
+        <section class="qs-header">
+            <div class="container">
+                <h1 class="qs-header__title">Select a Subject to Begin</h1>
+                <p class="qs-header__sub">
+                    Choose any subject below to start a timed CBT practice
+                    session.
+                </p>
 
-  <!-- ── Page Header ── -->
-  <section class="qs-header">
-    <div class="container">
-      <h1 class="qs-header__title">Select a Subject to Begin</h1>
-      <p class="qs-header__sub">
-        Choose any subject below to start a timed CBT practice session.
-      </p>
+                <!-- ── Filters ── -->
+                <div class="qs-filters">
+                    <button class="filter-btn active" data-filter="all">
+                        All
+                    </button>
+                    <button class="filter-btn" data-filter="science">
+                        Science
+                    </button>
+                    <button class="filter-btn" data-filter="arts">Arts</button>
+                    <button class="filter-btn" data-filter="commercial">
+                        Commercial
+                    </button>
+                </div>
+            </div>
+        </section>
 
-      <!-- ── Filters ── -->
-      <div class="qs-filters">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="science">Science</button>
-        <button class="filter-btn" data-filter="arts">Arts</button>
-        <button class="filter-btn" data-filter="commercial">Commercial</button>
-      </div>
-    </div>
-  </section>
+        <!-- ── Subject Cards Grid ── -->
+        <main class="section">
+            <div class="container">
+                <div class="qs-grid" id="subjectGrid">
+                    <div class="subject-card" data-category="science">
+                        <div class="subject-card__icon">📐</div>
+                        <div class="subject-card__info">
+                            <h2 class="subject-card__name">Mathematics</h2>
+                            <p class="subject-card__meta">
+                                40 questions · 60 minutes
+                            </p>
+                        </div>
+                        <<!-- Mathematics -->
+                        <button
+                            class="btn btn--primary subject-card__btn"
+                            data-subject="mathematics"
+                            aria-label="Start Mathematics quiz"
+                        >
+                            Start Quiz
+                        </button>
+                    </div>
 
-  <!-- ── Subject Cards Grid ── -->
-  <main class="section">
-    <div class="container">
-      <div class="qs-grid" id="subjectGrid">
+                    <div class="subject-card" data-category="arts">
+                        <div class="subject-card__icon">📝</div>
+                        <div class="subject-card__info">
+                            <h2 class="subject-card__name">English Language</h2>
+                            <p class="subject-card__meta">
+                                40 questions · 60 minutes
+                            </p>
+                        </div>
+                        <!-- English Language -->
+                        <button
+                            class="btn btn--primary subject-card__btn"
+                            data-subject="english"
+                            aria-label="Start English Language quiz"
+                        >
+                            Start Quiz
+                        </button>
+                    </div>
 
-        <div class="subject-card" data-category="science">
-          <div class="subject-card__icon">📐</div>
-          <div class="subject-card__info">
-            <h2 class="subject-card__name">Mathematics</h2>
-            <p class="subject-card__meta">40 questions · 60 minutes</p>
-          </div>
-          <button class="btn btn--primary subject-card__btn"
-                  data-subject="mathematics">Start Quiz</button>
-        </div>
+                    <div class="subject-card" data-category="science">
+                        <div class="subject-card__icon">🧬</div>
+                        <div class="subject-card__info">
+                            <h2 class="subject-card__name">Biology</h2>
+                            <p class="subject-card__meta">
+                                40 questions · 60 minutes
+                            </p>
+                        </div>
+                        <!-- Biology -->
+                        <button
+                            class="btn btn--primary subject-card__btn"
+                            data-subject="biology"
+                            aria-label="Start Biology quiz"
+                        >
+                            Start Quiz
+                        </button>
+                    </div>
 
-        <div class="subject-card" data-category="arts">
-          <div class="subject-card__icon">📝</div>
-          <div class="subject-card__info">
-            <h2 class="subject-card__name">English Language</h2>
-            <p class="subject-card__meta">40 questions · 60 minutes</p>
-          </div>
-          <button class="btn btn--primary subject-card__btn"
-                  data-subject="english">Start Quiz</button>
-        </div>
+                    <div class="subject-card" data-category="science">
+                        <div class="subject-card__icon">⚗️</div>
+                        <div class="subject-card__info">
+                            <h2 class="subject-card__name">Chemistry</h2>
+                            <p class="subject-card__meta">
+                                40 questions · 60 minutes
+                            </p>
+                        </div>
+                        <!-- Chemistry -->
+                        <button
+                            class="btn btn--primary subject-card__btn"
+                            data-subject="chemistry"
+                            aria-label="Start Chemistry quiz"
+                        >
+                            Start Quiz
+                        </button>
+                    </div>
 
-        <div class="subject-card" data-category="science">
-          <div class="subject-card__icon">🧬</div>
-          <div class="subject-card__info">
-            <h2 class="subject-card__name">Biology</h2>
-            <p class="subject-card__meta">40 questions · 60 minutes</p>
-          </div>
-          <button class="btn btn--primary subject-card__btn"
-                  data-subject="biology">Start Quiz</button>
-        </div>
+                    <div class="subject-card" data-category="science">
+                        <div class="subject-card__icon">⚡</div>
+                        <div class="subject-card__info">
+                            <h2 class="subject-card__name">Physics</h2>
+                            <p class="subject-card__meta">
+                                40 questions · 60 minutes
+                            </p>
+                        </div>
+                        <!-- Physics -->
+                        <button
+                            class="btn btn--primary subject-card__btn"
+                            data-subject="physics"
+                            aria-label="Start Physics quiz"
+                        >
+                            Start Quiz
+                        </button>
+                    </div>
 
-        <div class="subject-card" data-category="science">
-          <div class="subject-card__icon">⚗️</div>
-          <div class="subject-card__info">
-            <h2 class="subject-card__name">Chemistry</h2>
-            <p class="subject-card__meta">40 questions · 60 minutes</p>
-          </div>
-          <button class="btn btn--primary subject-card__btn"
-                  data-subject="chemistry">Start Quiz</button>
-        </div>
+                    <div class="subject-card" data-category="arts">
+                        <div class="subject-card__icon">🏛️</div>
+                        <div class="subject-card__info">
+                            <h2 class="subject-card__name">Government</h2>
+                            <p class="subject-card__meta">
+                                40 questions · 60 minutes
+                            </p>
+                        </div>
+                        <!-- Government -->
+                        <button
+                            class="btn btn--primary subject-card__btn"
+                            data-subject="government"
+                            aria-label="Start Government quiz"
+                        >
+                            Start Quiz
+                        </button>
+                    </div>
 
-        <div class="subject-card" data-category="science">
-          <div class="subject-card__icon">⚡</div>
-          <div class="subject-card__info">
-            <h2 class="subject-card__name">Physics</h2>
-            <p class="subject-card__meta">40 questions · 60 minutes</p>
-          </div>
-          <button class="btn btn--primary subject-card__btn"
-                  data-subject="physics">Start Quiz</button>
-        </div>
+                    <div class="subject-card" data-category="arts">
+                        <div class="subject-card__icon">📖</div>
+                        <div class="subject-card__info">
+                            <h2 class="subject-card__name">
+                                Literature in English
+                            </h2>
+                            <p class="subject-card__meta">
+                                40 questions · 60 minutes
+                            </p>
+                        </div>
+                        <!-- Literature in English -->
+<button class="btn btn--primary subject-card__btn"
+        data-subject="literature"
+        aria-label="Start Literature in English quiz">Start Quiz</button>
+                    </div>
 
-        <div class="subject-card" data-category="arts">
-          <div class="subject-card__icon">🏛️</div>
-          <div class="subject-card__info">
-            <h2 class="subject-card__name">Government</h2>
-            <p class="subject-card__meta">40 questions · 60 minutes</p>
-          </div>
-          <button class="btn btn--primary subject-card__btn"
-                  data-subject="government">Start Quiz</button>
-        </div>
+                    <div class="subject-card" data-category="commercial">
+                        <div class="subject-card__icon">📈</div>
+                        <div class="subject-card__info">
+                            <h2 class="subject-card__name">Economics</h2>
+                            <p class="subject-card__meta">
+                                40 questions · 60 minutes
+                            </p>
+                        </div>
+                        <!-- Economics -->
+<button class="btn btn--primary subject-card__btn"
+        data-subject="economics"
+        aria-label="Start Economics quiz">Start Quiz</button>
+                    </div>
+                </div>
 
-        <div class="subject-card" data-category="arts">
-          <div class="subject-card__icon">📖</div>
-          <div class="subject-card__info">
-            <h2 class="subject-card__name">Literature in English</h2>
-            <p class="subject-card__meta">40 questions · 60 minutes</p>
-          </div>
-          <button class="btn btn--primary subject-card__btn"
-                  data-subject="literature">Start Quiz</button>
-        </div>
+                <!-- Shown when a filter returns no cards -->
+                <p class="qs-empty hidden" id="emptyMsg">
+                    No subjects found for this filter.
+                </p>
+            </div>
+        </main>
 
-        <div class="subject-card" data-category="commercial">
-          <div class="subject-card__icon">📈</div>
-          <div class="subject-card__info">
-            <h2 class="subject-card__name">Economics</h2>
-            <p class="subject-card__meta">40 questions · 60 minutes</p>
-          </div>
-          <button class="btn btn--primary subject-card__btn"
-                  data-subject="economics">Start Quiz</button>
-        </div>
+        <!-- ── Footer ── -->
+        <footer class="footer">
+            <div class="container footer__inner">
+                <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
+                <p class="footer__copy">
+                    &copy; 2025 QuizPrep. Built for Nigerian students.
+                </p>
+            </div>
+        </footer>
 
-      </div>
-
-      <!-- Shown when a filter returns no cards -->
-      <p class="qs-empty hidden" id="emptyMsg">
-        No subjects found for this filter.
-      </p>
-
-    </div>
-  </main>
-
-  <!-- ── Footer ── -->
-  <footer class="footer">
-    <div class="container footer__inner">
-      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
-      <p class="footer__copy">&copy; 2025 QuizPrep. Built for Nigerian students.</p>
-    </div>
-  </footer>
-
-  <script src="js/quiz-select.js"></script>
-</body>
+        <script src="js/quiz-select.js"></script>
+    </body>
 </html>

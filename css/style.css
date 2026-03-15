@@ -75,26 +75,26 @@
 
 /* ── Navigation ── */
 :root.dark .nav {
-  background: #111827;
-  border-bottom: 1px solid var(--color-border);
+    background: #111827;
+    border-bottom: 1px solid var(--color-border);
 }
 
 /* ── Buttons ── */
 :root.dark .btn--outline {
-  color: var(--color-white);
-  border-color: rgba(255, 255, 255, 0.35);
+    color: var(--color-white);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 :root.dark .btn--outline:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--color-white);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-white);
 }
 
 :root.dark .btn--outline-dark {
-  color: var(--color-text);
-  border-color: var(--color-border);
+    color: var(--color-text);
+    border-color: var(--color-border);
 }
 :root.dark .btn--outline-dark:hover {
-  background: var(--color-bg-alt);
+    background: var(--color-bg-alt);
 }
 
 /* ── Cards ── */
@@ -105,133 +105,133 @@
 :root.dark .auth-card,
 :root.dark .hist-stat-card,
 :root.dark .modal {
-  background: #1e2537;
-  border-color: var(--color-border);
+    background: #1e2537;
+    border-color: var(--color-border);
 }
 
 /* ── Quiz options ── */
 :root.dark .option-btn {
-  background: #1e2537;
-  border-color: var(--color-border);
-  color: var(--color-text);
+    background: #1e2537;
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 :root.dark .option-btn:hover {
-  background: #252d42;
-  border-color: var(--color-primary);
+    background: #252d42;
+    border-color: var(--color-primary);
 }
 :root.dark .option-btn.selected {
-  background: rgba(74, 222, 128, 0.1);
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+    background: rgba(74, 222, 128, 0.1);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
 }
 :root.dark .option-btn.selected .option-label {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #0f1117;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #0f1117;
 }
 
 /* ── Form inputs ── */
 :root.dark .form-input {
-  background: #1e2537;
-  border-color: var(--color-border);
-  color: var(--color-text);
+    background: #1e2537;
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 :root.dark .form-input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
 }
 :root.dark .form-input::placeholder {
-  color: #4a5568;
+    color: #4a5568;
 }
 
 /* ── Select dropdowns ── */
 :root.dark .history-select {
-  background: #1e2537;
-  border-color: var(--color-border);
-  color: var(--color-text);
+    background: #1e2537;
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 
 /* ── Table ── */
 :root.dark .history-table thead tr {
-  background: #111827;
+    background: #111827;
 }
 :root.dark .history-table tbody tr:hover {
-  background: #1e2537;
+    background: #1e2537;
 }
 :root.dark .history-table-wrap {
-  border-color: var(--color-border);
+    border-color: var(--color-border);
 }
 
 /* ── Review cards ── */
 :root.dark .review-card {
-  background: #1e2537;
-  border-color: var(--color-border);
+    background: #1e2537;
+    border-color: var(--color-border);
 }
 :root.dark .review-card__header {
-  background: #252d42;
+    background: #252d42;
 }
 :root.dark .review-option {
-  background: #1e2537;
-  border-color: var(--color-border);
-  color: var(--color-text);
+    background: #1e2537;
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 
 /* ── Score ring track ── */
 :root.dark .score-ring__track {
-  stroke: rgba(255, 255, 255, 0.08);
+    stroke: rgba(255, 255, 255, 0.08);
 }
 
 /* ── Modal overlay ── */
 :root.dark .modal-overlay {
-  background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 /* ── Filter buttons (quiz select + results) ── */
 :root.dark .filter-btn,
 :root.dark .review-filter {
-  border-color: var(--color-border);
-  color: var(--color-text-muted);
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
 }
 :root.dark .filter-btn.active,
 :root.dark .review-filter.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #0f1117;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #0f1117;
 }
 
 /* ── Auth pages ── */
 :root.dark .auth-page {
-  background: #0f1117;
+    background: #0f1117;
 }
 :root.dark .auth-error {
-  background: rgba(220, 38, 38, 0.15);
-  border-color: rgba(220, 38, 38, 0.3);
+    background: rgba(220, 38, 38, 0.15);
+    border-color: rgba(220, 38, 38, 0.3);
 }
 :root.dark .auth-success {
-  background: rgba(34, 197, 94, 0.15);
-  border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.3);
 }
 
 /* ── Footer ── */
 :root.dark .footer {
-  background: #111827;
-  border-top: 1px solid var(--color-border);
+    background: #111827;
+    border-top: 1px solid var(--color-border);
 }
 
 /* ── Dark mode toggle button in nav ── */
 .theme-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-  transition: background var(--transition);
-  line-height: 1;
-  color: var(--color-white);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition);
+    line-height: 1;
+    color: var(--color-white);
 }
 .theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.12);
 }
 
 /* ── 2. Reset ── */
@@ -492,4 +492,78 @@ img {
         flex-direction: column;
         text-align: center;
     }
+}
+
+/* =============================================
+   STAGE 9 — Final Polish
+   ============================================= */
+
+/* ── Smooth page load ── */
+body {
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Focus rings — keyboard navigation ── */
+*:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+}
+
+/* ── Button press effect ── */
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* ── Text selection colour ── */
+::selection {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+:root.dark ::selection {
+    background: var(--color-accent);
+    color: #0f1117;
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-alt);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+}
+
+/* ── Prevent nav height shift ── */
+.nav__inner {
+    min-height: 52px;
+}
+
+/* ── Images never overflow ── */
+img,
+svg {
+    display: block;
+    max-width: 100%;
 }
