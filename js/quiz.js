@@ -7,6 +7,10 @@
 //  1. SETUP — Read state from sessionStorage
 // ─────────────────────────────────────────────
 
+const currentUser = JSON.parse(localStorage.getItem('qp_current') || 'null');
+if (!currentUser) { window.location.href = 'login.html'; }
+updateNav();
+
 // Read which subject the user picked on the selection screen
 const subject = sessionStorage.getItem('selectedSubject');
 

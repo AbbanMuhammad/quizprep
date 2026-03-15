@@ -5,6 +5,11 @@
 
 // ── 1. Grab elements we need ──────────────────
 
+// Protect this page — redirect to login if not authenticated
+const currentUser = JSON.parse(localStorage.getItem('qp_current') || 'null');
+if (!currentUser) { window.location.href = 'login.html'; }
+updateNav();
+
 // All the subject cards on the page
 const subjectCards = document.querySelectorAll('.subject-card');
 
