@@ -16,8 +16,40 @@ if (!subject || !QUESTIONS[subject]) {
   window.location.href = 'quiz-select.html';
 }
 
-// Get the question array for this subject
-const questions = QUESTIONS[subject];
+// ── Shuffle helper (Fisher-Yates) ──────────────
+// We shuffle a deep copy so the original QUESTIONS object is never mutated.
+// Each question's options are also shuffled, and the answer index is updated
+// to point to the correct option in its new position.
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function prepareQuestions(rawQuestions) {
+  // Step 1: shuffle the order of questions
+  const shuffled = shuffleArray(rawQuestions);
+
+  // Step 2: for each question, shuffle its options
+  // and update the answer index to match the new option order
+  return shuffled.map(q => {
+    const correctText = q.options[q.answer]; // remember the correct answer text
+
+    const shuffledOptions = shuffleArray(q.options);
+
+    return {
+      question: q.question,
+      options: shuffledOptions,
+      answer: shuffledOptions.indexOf(correctText) // new index of the correct answer
+    };
+  });
+}
+
+// Get the question array for this subject — shuffled fresh every quiz
+const questions = prepareQuestions(QUESTIONS[subject]);
 
 // Total quiz duration in seconds: 30 minutes
 const QUIZ_DURATION = 60 * 60;
