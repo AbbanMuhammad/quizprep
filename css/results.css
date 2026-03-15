@@ -1,0 +1,364 @@
+/* =============================================
+   QUIZPREP — Results Screen Styles
+   Stage 4
+   ============================================= */
+
+/* ── Score Hero Section ── */
+.score-hero {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-light) 100%
+  );
+  color: var(--color-white);
+  padding: var(--space-2xl) 0;
+}
+
+.score-hero__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── Animated Score Ring ── */
+.score-ring {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+}
+
+.score-ring__svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* start arc from top */
+}
+
+.score-ring__track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 10;
+}
+
+.score-ring__fill {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.2s ease;
+}
+
+/* Colour the ring based on score */
+.score-ring.excellent .score-ring__fill { stroke: #4ade80; }
+.score-ring.good      .score-ring__fill { stroke: var(--color-accent); }
+.score-ring.poor      .score-ring__fill { stroke: #f87171; }
+
+.score-ring__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.score-ring__pct {
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.score-ring__raw {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 4px;
+}
+
+/* ── Score Hero Info ── */
+.score-hero__info {
+  max-width: 480px;
+}
+
+.score-hero__subject {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+.score-hero__message {
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: var(--space-sm);
+}
+
+.score-hero__time {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: var(--space-lg);
+}
+
+.score-hero__btns {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+/* ── Stats Bar ── */
+.stats-bar {
+  background: var(--color-bg-alt);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-md) 0;
+}
+
+.stats-bar__inner {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  text-align: center;
+}
+
+.stat__value {
+  display: block;
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.stat__label {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Review Section ── */
+.review { background: var(--color-bg); }
+
+/* ── Review Filter Tabs ── */
+.review-filters {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+
+.review-filter {
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: inherit;
+}
+
+.review-filter:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.review-filter.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+/* ── Review Cards ── */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.review-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow var(--transition);
+}
+
+.review-card:hover { box-shadow: var(--shadow); }
+
+/* Left accent stripe by result */
+.review-card.correct { border-left: 5px solid #22c55e; }
+.review-card.wrong   { border-left: 5px solid #ef4444; }
+.review-card.skipped { border-left: 5px solid #f59e0b; }
+
+/* ── Review Card Header ── */
+.review-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--color-bg-alt);
+  cursor: pointer;
+  user-select: none;
+}
+
+.review-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+}
+
+.review-card__num {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.review-card__question {
+  font-size: var(--fs-base);
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.review-badge {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.review-badge.correct {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.review-badge.wrong {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.review-badge.skipped {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+/* ── Review Card Body (expandable) ── */
+.review-card__body {
+  display: none;
+  padding: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.review-card__body.open { display: block; }
+
+.review-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.review-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  font-size: var(--fs-sm);
+  background: var(--color-bg);
+  transition: all var(--transition);
+}
+
+/* Correct answer — always green */
+.review-option.is-correct {
+  border-color: #22c55e;
+  background: #f0fdf4;
+  color: #15803d;
+  font-weight: 600;
+}
+
+/* User's wrong pick — red */
+.review-option.user-wrong {
+  border-color: #ef4444;
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.review-option__letter {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1.5px solid var(--color-border);
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.review-option.is-correct .review-option__letter {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+}
+
+.review-option.user-wrong .review-option__letter {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+}
+
+.review-option__tag {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.review-option.is-correct .review-option__tag {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.review-option.user-wrong .review-option__tag {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.review-card__chevron {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.review-card__chevron.open { transform: rotate(180deg); }
+
+/* ── Hidden utility ── */
+.hidden { display: none !important; }
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .score-hero__inner   { flex-direction: column; text-align: center; }
+  .score-hero__btns    { justify-content: center; }
+  .score-ring          { width: 130px; height: 130px; }
+  .score-hero__message { font-size: var(--fs-xl); }
+  .stats-bar__inner    { gap: var(--space-md); }
+  .review-filters      { gap: 6px; }
+  .review-filter       { font-size: 12px; padding: 0.4rem 0.9rem; }
+}

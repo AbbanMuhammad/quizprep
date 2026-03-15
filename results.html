@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results | QuizPrep</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/results.css">
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
+      <a href="quiz-select.html" class="btn btn--outline">Choose Subject</a>
+    </div>
+  </nav>
+
+  <!-- ── Score Hero ── -->
+  <section class="score-hero">
+    <div class="container score-hero__inner">
+
+      <!-- Score circle -->
+      <div class="score-ring" id="scoreRing">
+        <svg class="score-ring__svg" viewBox="0 0 120 120">
+          <circle class="score-ring__track" cx="60" cy="60" r="52"/>
+          <circle class="score-ring__fill" id="ringFill"
+                  cx="60" cy="60" r="52"
+                  stroke-dasharray="327"
+                  stroke-dashoffset="327"/>
+        </svg>
+        <div class="score-ring__label">
+          <span class="score-ring__pct" id="scorePct">0%</span>
+          <span class="score-ring__raw" id="scoreRaw">0 / 0</span>
+        </div>
+      </div>
+
+      <!-- Subject + performance message -->
+      <div class="score-hero__info">
+        <p class="score-hero__subject" id="resultSubject">Subject</p>
+        <h1 class="score-hero__message" id="resultMessage">Loading...</h1>
+        <p class="score-hero__time" id="resultTime"></p>
+
+        <!-- Action buttons -->
+        <div class="score-hero__btns">
+          <button class="btn btn--primary" id="retakeBtn">
+            Retake Quiz
+          </button>
+          <a href="quiz-select.html" class="btn btn--outline">
+            Choose Another Subject
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Stats Bar ── -->
+  <section class="stats-bar">
+    <div class="container stats-bar__inner">
+      <div class="stat">
+        <span class="stat__value" id="statCorrect">0</span>
+        <span class="stat__label">Correct</span>
+      </div>
+      <div class="stat">
+        <span class="stat__value" id="statWrong">0</span>
+        <span class="stat__label">Wrong</span>
+      </div>
+      <div class="stat">
+        <span class="stat__value" id="statSkipped">0</span>
+        <span class="stat__label">Skipped</span>
+      </div>
+      <div class="stat">
+        <span class="stat__value" id="statTime">0:00</span>
+        <span class="stat__label">Time Taken</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Question Review ── -->
+  <section class="section review">
+    <div class="container">
+      <h2 class="section__title">Question Review</h2>
+
+      <!-- Filter tabs -->
+      <div class="review-filters">
+        <button class="review-filter active" data-filter="all">
+          All Questions
+        </button>
+        <button class="review-filter" data-filter="correct">
+          Correct Only
+        </button>
+        <button class="review-filter" data-filter="wrong">
+          Wrong Only
+        </button>
+        <button class="review-filter" data-filter="skipped">
+          Skipped
+        </button>
+      </div>
+
+      <!-- Review cards injected here by JS -->
+      <div class="review-list" id="reviewList"></div>
+
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
+      <p class="footer__copy">&copy; 2025 QuizPrep. Built for Nigerian students.</p>
+    </div>
+  </footer>
+
+  <script src="data/questions.js"></script>
+  <script src="js/results.js"></script>
+</body>
+</html>
