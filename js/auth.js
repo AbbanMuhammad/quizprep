@@ -3,26 +3,37 @@
 // =============================================
 
 // ─────────────────────────────────────────────
-//  1. STORAGE HELPERS
-//  KEYS, getCurrentUser and logout live in
-//  app.js — we only define what's unique here
+//  STORAGE — self-contained, no app.js needed
 // ─────────────────────────────────────────────
 
+const AUTH_KEYS = {
+  users:   'qp_users',
+  current: 'qp_current'
+};
+
 function getUsers() {
-  return JSON.parse(localStorage.getItem('qp_users') || '[]');
+  try {
+    return JSON.parse(localStorage.getItem(AUTH_KEYS.users) || '[]');
+  } catch(e) { return []; }
 }
 
 function saveUsers(users) {
-  localStorage.setItem('qp_users', JSON.stringify(users));
+  localStorage.setItem(AUTH_KEYS.users, JSON.stringify(users));
+}
+
+function getCurrentUser() {
+  try {
+    return JSON.parse(localStorage.getItem(AUTH_KEYS.current) || 'null');
+  } catch(e) { return null; }
 }
 
 function setCurrentUser(user) {
-  localStorage.setItem('qp_current', JSON.stringify(user));
+  localStorage.setItem(AUTH_KEYS.current, JSON.stringify(user));
 }
 
 
 // ─────────────────────────────────────────────
-//  2. VALIDATION HELPERS
+//  VALIDATION
 // ─────────────────────────────────────────────
 
 function validateEmail(email) {
@@ -33,66 +44,71 @@ function validatePassword(password) {
   return password.length >= 6;
 }
 
-function showError(elementId, message) {
-  const el = document.getElementById(elementId);
+
+// ─────────────────────────────────────────────
+//  UI HELPERS
+// ─────────────────────────────────────────────
+
+function showError(id, msg) {
+  var el = document.getElementById(id);
   if (!el) return;
-  el.textContent = '⚠ ' + message;
-  el.classList.remove('hidden');
+  el.textContent = '⚠ ' + msg;
+  el.className = el.className.replace(' hidden', '').replace('hidden', '');
 }
 
-function hideError(elementId) {
-  const el = document.getElementById(elementId);
-  if (el) el.classList.add('hidden');
-}
-
-function showSuccess(elementId, message) {
-  const el = document.getElementById(elementId);
+function hideError(id) {
+  var el = document.getElementById(id);
   if (!el) return;
-  el.textContent = '✓ ' + message;
-  el.classList.remove('hidden');
+  if (el.className.indexOf('hidden') === -1) el.className += ' hidden';
 }
 
-function setInputError(inputId, hasError) {
-  const el = document.getElementById(inputId);
+function showSuccess(id, msg) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = '✓ ' + msg;
+  el.className = el.className.replace(' hidden', '').replace('hidden', '');
+}
+
+function setInputError(id, hasError) {
+  var el = document.getElementById(id);
   if (!el) return;
   if (hasError) {
-    el.classList.add('error');
+    if (el.className.indexOf('error') === -1) el.className += ' error';
   } else {
-    el.classList.remove('error');
+    el.className = el.className.replace(' error', '').replace('error', '');
   }
 }
 
 
 // ─────────────────────────────────────────────
-//  3. PASSWORD STRENGTH METER
+//  PASSWORD STRENGTH
 // ─────────────────────────────────────────────
 
-function checkStrength(password) {
-  let score = 0;
-  if (password.length >= 6)          score++;
-  if (password.length >= 10)         score++;
-  if (/[A-Z]/.test(password))        score++;
-  if (/[0-9]/.test(password))        score++;
-  if (/[^A-Za-z0-9]/.test(password)) score++;
+function checkStrength(pw) {
+  var score = 0;
+  if (pw.length >= 6)          score++;
+  if (pw.length >= 10)         score++;
+  if (/[A-Z]/.test(pw))        score++;
+  if (/[0-9]/.test(pw))        score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
   return score;
 }
 
-function updateStrengthUI(password) {
-  const fill  = document.getElementById('strengthFill');
-  const label = document.getElementById('strengthLabel');
+function updateStrengthUI(pw) {
+  var fill  = document.getElementById('strengthFill');
+  var label = document.getElementById('strengthLabel');
   if (!fill || !label) return;
 
-  const score  = checkStrength(password);
-  const levels = [
+  var levels = [
     { pct: 0,   color: '',        text: '' },
     { pct: 20,  color: '#ef4444', text: 'Very weak' },
     { pct: 40,  color: '#f97316', text: 'Weak' },
     { pct: 60,  color: '#eab308', text: 'Fair' },
     { pct: 80,  color: '#22c55e', text: 'Strong' },
-    { pct: 100, color: '#15803d', text: 'Very strong' },
+    { pct: 100, color: '#15803d', text: 'Very strong' }
   ];
 
-  const level       = levels[score];
+  var level         = levels[checkStrength(pw)];
   fill.style.width      = level.pct + '%';
   fill.style.background = level.color;
   label.textContent     = level.text;
@@ -101,15 +117,15 @@ function updateStrengthUI(password) {
 
 
 // ─────────────────────────────────────────────
-//  4. PASSWORD VISIBILITY TOGGLE
+//  PASSWORD TOGGLE
 // ─────────────────────────────────────────────
 
 function setupToggle(btnId, inputId) {
-  const btn   = document.getElementById(btnId);
-  const input = document.getElementById(inputId);
+  var btn   = document.getElementById(btnId);
+  var input = document.getElementById(inputId);
   if (!btn || !input) return;
 
-  btn.addEventListener('click', function () {
+  btn.addEventListener('click', function() {
     if (input.type === 'password') {
       input.type      = 'text';
       btn.textContent = '🙈';
@@ -122,43 +138,126 @@ function setupToggle(btnId, inputId) {
 
 
 // ─────────────────────────────────────────────
-//  5. REGISTER LOGIC
+//  LOGIN
+// ─────────────────────────────────────────────
+
+function initLogin() {
+  // Already logged in — skip login page
+  if (getCurrentUser()) {
+    window.location.href = 'quiz-select.html';
+    return;
+  }
+
+  var emailInput    = document.getElementById('loginEmail');
+  var passwordInput = document.getElementById('loginPassword');
+  var loginBtn      = document.getElementById('loginBtn');
+
+  if (!loginBtn) return;
+
+  setupToggle('toggleLoginPassword', 'loginPassword');
+
+  emailInput.addEventListener('input', function() {
+    setInputError('loginEmail', false);
+    hideError('loginError');
+  });
+
+  passwordInput.addEventListener('input', function() {
+    setInputError('loginPassword', false);
+    hideError('loginError');
+  });
+
+  emailInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') loginBtn.click();
+  });
+
+  passwordInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') loginBtn.click();
+  });
+
+  loginBtn.addEventListener('click', function() {
+    var email    = emailInput.value.trim().toLowerCase();
+    var password = passwordInput.value;
+
+    if (!email) {
+      showError('loginError', 'Please enter your email address.');
+      setInputError('loginEmail', true);
+      return;
+    }
+
+    if (!password) {
+      showError('loginError', 'Please enter your password.');
+      setInputError('loginPassword', true);
+      return;
+    }
+
+    var users = getUsers();
+    var user  = null;
+
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].email === email && users[i].password === password) {
+        user = users[i];
+        break;
+      }
+    }
+
+    if (!user) {
+      showError('loginError', 'Incorrect email or password. Please try again.');
+      setInputError('loginEmail', true);
+      setInputError('loginPassword', true);
+      return;
+    }
+
+    setCurrentUser(user);
+
+    var redirect = sessionStorage.getItem('redirectAfterLogin') || 'quiz-select.html';
+    sessionStorage.removeItem('redirectAfterLogin');
+    window.location.href = redirect;
+  });
+}
+
+
+// ─────────────────────────────────────────────
+//  REGISTER
 // ─────────────────────────────────────────────
 
 function initRegister() {
-  const nameInput     = document.getElementById('regName');
-  const emailInput    = document.getElementById('regEmail');
-  const passwordInput = document.getElementById('regPassword');
-  const confirmInput  = document.getElementById('regConfirm');
-  const registerBtn   = document.getElementById('registerBtn');
+  var nameInput     = document.getElementById('regName');
+  var emailInput    = document.getElementById('regEmail');
+  var passwordInput = document.getElementById('regPassword');
+  var confirmInput  = document.getElementById('regConfirm');
+  var registerBtn   = document.getElementById('registerBtn');
 
   if (!registerBtn) return;
 
-  // Password toggles
   setupToggle('toggleRegPassword', 'regPassword');
   setupToggle('toggleRegConfirm',  'regConfirm');
 
-  // Live strength meter
-  passwordInput.addEventListener('input', () => {
+  passwordInput.addEventListener('input', function() {
     updateStrengthUI(passwordInput.value);
     setInputError('regPassword', false);
     hideError('registerError');
   });
 
-  // Clear errors on input
-  [nameInput, emailInput, confirmInput].forEach(input => {
-    input.addEventListener('input', () => {
-      setInputError(input.id, false);
-      hideError('registerError');
-    });
+  nameInput.addEventListener('input', function() {
+    setInputError('regName', false);
+    hideError('registerError');
   });
 
-  // Submit
-  registerBtn.addEventListener('click', () => {
-    const name     = nameInput.value.trim();
-    const email    = emailInput.value.trim().toLowerCase();
-    const password = passwordInput.value;
-    const confirm  = confirmInput.value;
+  emailInput.addEventListener('input', function() {
+    setInputError('regEmail', false);
+    hideError('registerError');
+  });
+
+  confirmInput.addEventListener('input', function() {
+    setInputError('regConfirm', false);
+    hideError('registerError');
+  });
+
+  registerBtn.addEventListener('click', function() {
+    var name     = nameInput.value.trim();
+    var email    = emailInput.value.trim().toLowerCase();
+    var password = passwordInput.value;
+    var confirm  = confirmInput.value;
 
     if (!name) {
       showError('registerError', 'Please enter your full name.');
@@ -184,21 +283,24 @@ function initRegister() {
       return;
     }
 
-    const users  = getUsers();
-    const exists = users.find(u => u.email === email);
+    var users  = getUsers();
+    var exists = false;
+
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].email === email) { exists = true; break; }
+    }
 
     if (exists) {
-      showError('registerError',
-        'An account with this email already exists. Please log in.');
+      showError('registerError', 'An account with this email already exists. Please log in.');
       setInputError('regEmail', true);
       return;
     }
 
-    const newUser = {
+    var newUser = {
       id:        Date.now(),
-      name,
-      email,
-      password,
+      name:      name,
+      email:     email,
+      password:  password,
       createdAt: new Date().toISOString()
     };
 
@@ -206,13 +308,11 @@ function initRegister() {
     saveUsers(users);
     setCurrentUser(newUser);
 
-    showSuccess('registerSuccess',
-      'Account created! Redirecting you to the quiz...');
+    showSuccess('registerSuccess', 'Account created! Redirecting you to the quiz...');
     hideError('registerError');
 
-    setTimeout(() => {
-      const redirect =
-        sessionStorage.getItem('redirectAfterLogin') || 'quiz-select.html';
+    setTimeout(function() {
+      var redirect = sessionStorage.getItem('redirectAfterLogin') || 'quiz-select.html';
       sessionStorage.removeItem('redirectAfterLogin');
       window.location.href = redirect;
     }, 1200);
@@ -221,84 +321,10 @@ function initRegister() {
 
 
 // ─────────────────────────────────────────────
-//  6. LOGIN LOGIC
+//  INIT — runs when DOM is ready
 // ─────────────────────────────────────────────
 
-function initLogin() {
-  if (JSON.parse(localStorage.getItem('qp_current') || 'null')) {
-    window.location.href = 'quiz-select.html';
-    return;
-  }
-
-  const emailInput    = document.getElementById('loginEmail');
-  const passwordInput = document.getElementById('loginPassword');
-  const loginBtn      = document.getElementById('loginBtn');
-
-  if (!loginBtn) return;
-
-  // Password toggle
-  setupToggle('toggleLoginPassword', 'loginPassword');
-
-  // Clear errors on input
-  [emailInput, passwordInput].forEach(input => {
-    input.addEventListener('input', () => {
-      setInputError(input.id, false);
-      hideError('loginError');
-    });
-  });
-
-  // Enter key submits
-  [emailInput, passwordInput].forEach(input => {
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') loginBtn.click();
-    });
-  });
-
-  // Submit
-  loginBtn.addEventListener('click', () => {
-    const email    = emailInput.value.trim().toLowerCase();
-    const password = passwordInput.value;
-
-    if (!email) {
-      showError('loginError', 'Please enter your email address.');
-      setInputError('loginEmail', true);
-      return;
-    }
-
-    if (!password) {
-      showError('loginError', 'Please enter your password.');
-      setInputError('loginPassword', true);
-      return;
-    }
-
-    const users = getUsers();
-    const user  = users.find(
-      u => u.email === email && u.password === password
-    );
-
-    if (!user) {
-      showError('loginError',
-        'Incorrect email or password. Please try again.');
-      setInputError('loginEmail', true);
-      setInputError('loginPassword', true);
-      return;
-    }
-
-    setCurrentUser(user);
-
-    const redirect =
-      sessionStorage.getItem('redirectAfterLogin') || 'quiz-select.html';
-    sessionStorage.removeItem('redirectAfterLogin');
-    window.location.href = redirect;
-  });
-}
-
-
-// ─────────────────────────────────────────────
-//  7. AUTO-INITIALISE
-// ─────────────────────────────────────────────
-
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   if (document.getElementById('loginBtn'))    initLogin();
   if (document.getElementById('registerBtn')) initRegister();
 });
