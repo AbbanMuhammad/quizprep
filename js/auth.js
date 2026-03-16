@@ -1,47 +1,28 @@
 // =============================================
 //  QUIZPREP — Authentication Logic
+//  Self-contained, no external dependencies
 // =============================================
 
 // ─────────────────────────────────────────────
-//  STORAGE — self-contained, no app.js needed
+//  STORAGE
 // ─────────────────────────────────────────────
 
-const AUTH_KEYS = {
-  users:   'qp_users',
-  current: 'qp_current'
-};
-
 function getUsers() {
-  try {
-    return JSON.parse(localStorage.getItem(AUTH_KEYS.users) || '[]');
-  } catch(e) { return []; }
+  try { return JSON.parse(localStorage.getItem('qp_users') || '[]'); }
+  catch(e) { return []; }
 }
 
-function saveUsers(users) {
-  localStorage.setItem(AUTH_KEYS.users, JSON.stringify(users));
+function saveUsers(u) {
+  localStorage.setItem('qp_users', JSON.stringify(u));
 }
 
 function getCurrentUser() {
-  try {
-    return JSON.parse(localStorage.getItem(AUTH_KEYS.current) || 'null');
-  } catch(e) { return null; }
+  try { return JSON.parse(localStorage.getItem('qp_current') || 'null'); }
+  catch(e) { return null; }
 }
 
-function setCurrentUser(user) {
-  localStorage.setItem(AUTH_KEYS.current, JSON.stringify(user));
-}
-
-
-// ─────────────────────────────────────────────
-//  VALIDATION
-// ─────────────────────────────────────────────
-
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validatePassword(password) {
-  return password.length >= 6;
+function setCurrentUser(u) {
+  localStorage.setItem('qp_current', JSON.stringify(u));
 }
 
 
@@ -49,34 +30,43 @@ function validatePassword(password) {
 //  UI HELPERS
 // ─────────────────────────────────────────────
 
-function showError(id, msg) {
+function showEl(id) {
   var el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = '⚠ ' + msg;
-  el.className = el.className.replace(' hidden', '').replace('hidden', '');
+  if (el) el.style.display = 'block';
+}
+
+function hideEl(id) {
+  var el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+function setText(id, msg) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = msg;
+}
+
+function showError(id, msg) {
+  setText(id, '⚠ ' + msg);
+  showEl(id);
 }
 
 function hideError(id) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  if (el.className.indexOf('hidden') === -1) el.className += ' hidden';
+  hideEl(id);
 }
 
 function showSuccess(id, msg) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = '✓ ' + msg;
-  el.className = el.className.replace(' hidden', '').replace('hidden', '');
+  setText(id, '✓ ' + msg);
+  showEl(id);
 }
 
-function setInputError(id, hasError) {
+function markError(id) {
   var el = document.getElementById(id);
-  if (!el) return;
-  if (hasError) {
-    if (el.className.indexOf('error') === -1) el.className += ' error';
-  } else {
-    el.className = el.className.replace(' error', '').replace('error', '');
-  }
+  if (el) el.style.borderColor = '#ef4444';
+}
+
+function clearError(id) {
+  var el = document.getElementById(id);
+  if (el) el.style.borderColor = '';
 }
 
 
@@ -84,20 +74,17 @@ function setInputError(id, hasError) {
 //  PASSWORD STRENGTH
 // ─────────────────────────────────────────────
 
-function checkStrength(pw) {
+function updateStrengthUI(pw) {
+  var fill  = document.getElementById('strengthFill');
+  var label = document.getElementById('strengthLabel');
+  if (!fill || !label) return;
+
   var score = 0;
   if (pw.length >= 6)          score++;
   if (pw.length >= 10)         score++;
   if (/[A-Z]/.test(pw))        score++;
   if (/[0-9]/.test(pw))        score++;
   if (/[^A-Za-z0-9]/.test(pw)) score++;
-  return score;
-}
-
-function updateStrengthUI(pw) {
-  var fill  = document.getElementById('strengthFill');
-  var label = document.getElementById('strengthLabel');
-  if (!fill || !label) return;
 
   var levels = [
     { pct: 0,   color: '',        text: '' },
@@ -108,11 +95,10 @@ function updateStrengthUI(pw) {
     { pct: 100, color: '#15803d', text: 'Very strong' }
   ];
 
-  var level         = levels[checkStrength(pw)];
-  fill.style.width      = level.pct + '%';
-  fill.style.background = level.color;
-  label.textContent     = level.text;
-  label.style.color     = level.color;
+  fill.style.width      = levels[score].pct + '%';
+  fill.style.background = levels[score].color;
+  label.textContent     = levels[score].text;
+  label.style.color     = levels[score].color;
 }
 
 
@@ -125,7 +111,7 @@ function setupToggle(btnId, inputId) {
   var input = document.getElementById(inputId);
   if (!btn || !input) return;
 
-  btn.addEventListener('click', function() {
+  btn.onclick = function() {
     if (input.type === 'password') {
       input.type      = 'text';
       btn.textContent = '🙈';
@@ -133,86 +119,7 @@ function setupToggle(btnId, inputId) {
       input.type      = 'password';
       btn.textContent = '👁';
     }
-  });
-}
-
-
-// ─────────────────────────────────────────────
-//  LOGIN
-// ─────────────────────────────────────────────
-
-function initLogin() {
-  // Already logged in — skip login page
-  if (getCurrentUser()) {
-    window.location.href = 'quiz-select.html';
-    return;
-  }
-
-  var emailInput    = document.getElementById('loginEmail');
-  var passwordInput = document.getElementById('loginPassword');
-  var loginBtn      = document.getElementById('loginBtn');
-
-  if (!loginBtn) return;
-
-  setupToggle('toggleLoginPassword', 'loginPassword');
-
-  emailInput.addEventListener('input', function() {
-    setInputError('loginEmail', false);
-    hideError('loginError');
-  });
-
-  passwordInput.addEventListener('input', function() {
-    setInputError('loginPassword', false);
-    hideError('loginError');
-  });
-
-  emailInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') loginBtn.click();
-  });
-
-  passwordInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') loginBtn.click();
-  });
-
-  loginBtn.addEventListener('click', function() {
-    var email    = emailInput.value.trim().toLowerCase();
-    var password = passwordInput.value;
-
-    if (!email) {
-      showError('loginError', 'Please enter your email address.');
-      setInputError('loginEmail', true);
-      return;
-    }
-
-    if (!password) {
-      showError('loginError', 'Please enter your password.');
-      setInputError('loginPassword', true);
-      return;
-    }
-
-    var users = getUsers();
-    var user  = null;
-
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].email === email && users[i].password === password) {
-        user = users[i];
-        break;
-      }
-    }
-
-    if (!user) {
-      showError('loginError', 'Incorrect email or password. Please try again.');
-      setInputError('loginEmail', true);
-      setInputError('loginPassword', true);
-      return;
-    }
-
-    setCurrentUser(user);
-
-    var redirect = sessionStorage.getItem('redirectAfterLogin') || 'quiz-select.html';
-    sessionStorage.removeItem('redirectAfterLogin');
-    window.location.href = redirect;
-  });
+  };
 }
 
 
@@ -221,81 +128,79 @@ function initLogin() {
 // ─────────────────────────────────────────────
 
 function initRegister() {
-  var nameInput     = document.getElementById('regName');
-  var emailInput    = document.getElementById('regEmail');
-  var passwordInput = document.getElementById('regPassword');
-  var confirmInput  = document.getElementById('regConfirm');
-  var registerBtn   = document.getElementById('registerBtn');
-
+  var registerBtn = document.getElementById('registerBtn');
   if (!registerBtn) return;
 
+  // Hide error/success banners initially using style
+  hideEl('registerError');
+  hideEl('registerSuccess');
+
+  // Wire up toggles
   setupToggle('toggleRegPassword', 'regPassword');
   setupToggle('toggleRegConfirm',  'regConfirm');
 
-  passwordInput.addEventListener('input', function() {
-    updateStrengthUI(passwordInput.value);
-    setInputError('regPassword', false);
+  // Strength meter
+  var pwInput = document.getElementById('regPassword');
+  if (pwInput) {
+    pwInput.oninput = function() {
+      updateStrengthUI(pwInput.value);
+      clearError('regPassword');
+      hideError('registerError');
+    };
+  }
+
+  // Submit
+  registerBtn.onclick = function() {
+
+    var name     = (document.getElementById('regName').value     || '').trim();
+    var email    = (document.getElementById('regEmail').value    || '').trim().toLowerCase();
+    var password = (document.getElementById('regPassword').value || '');
+    var confirm  = (document.getElementById('regConfirm').value  || '');
+
+    // Clear previous errors
+    ['regName','regEmail','regPassword','regConfirm'].forEach(clearError);
     hideError('registerError');
-  });
 
-  nameInput.addEventListener('input', function() {
-    setInputError('regName', false);
-    hideError('registerError');
-  });
-
-  emailInput.addEventListener('input', function() {
-    setInputError('regEmail', false);
-    hideError('registerError');
-  });
-
-  confirmInput.addEventListener('input', function() {
-    setInputError('regConfirm', false);
-    hideError('registerError');
-  });
-
-  registerBtn.addEventListener('click', function() {
-    var name     = nameInput.value.trim();
-    var email    = emailInput.value.trim().toLowerCase();
-    var password = passwordInput.value;
-    var confirm  = confirmInput.value;
-
+    // Validate
     if (!name) {
       showError('registerError', 'Please enter your full name.');
-      setInputError('regName', true);
+      markError('regName');
       return;
     }
 
-    if (!validateEmail(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       showError('registerError', 'Please enter a valid email address.');
-      setInputError('regEmail', true);
+      markError('regEmail');
       return;
     }
 
-    if (!validatePassword(password)) {
+    if (password.length < 6) {
       showError('registerError', 'Password must be at least 6 characters.');
-      setInputError('regPassword', true);
+      markError('regPassword');
       return;
     }
 
     if (password !== confirm) {
       showError('registerError', 'Passwords do not match.');
-      setInputError('regConfirm', true);
+      markError('regConfirm');
       return;
     }
 
+    // Check duplicate
     var users  = getUsers();
     var exists = false;
-
     for (var i = 0; i < users.length; i++) {
       if (users[i].email === email) { exists = true; break; }
     }
 
     if (exists) {
-      showError('registerError', 'An account with this email already exists. Please log in.');
-      setInputError('regEmail', true);
+      showError('registerError',
+        'An account with this email already exists. Please log in.');
+      markError('regEmail');
       return;
     }
 
+    // Save
     var newUser = {
       id:        Date.now(),
       name:      name,
@@ -308,23 +213,98 @@ function initRegister() {
     saveUsers(users);
     setCurrentUser(newUser);
 
-    showSuccess('registerSuccess', 'Account created! Redirecting you to the quiz...');
-    hideError('registerError');
+    showSuccess('registerSuccess',
+      'Account created! Redirecting...');
 
     setTimeout(function() {
-      var redirect = sessionStorage.getItem('redirectAfterLogin') || 'quiz-select.html';
-      sessionStorage.removeItem('redirectAfterLogin');
-      window.location.href = redirect;
+      window.location.href = 'quiz-select.html';
     }, 1200);
-  });
+  };
 }
 
 
 // ─────────────────────────────────────────────
-//  INIT — runs when DOM is ready
+//  LOGIN
 // ─────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', function() {
-  if (document.getElementById('loginBtn'))    initLogin();
-  if (document.getElementById('registerBtn')) initRegister();
-});
+function initLogin() {
+  // Already logged in
+  if (getCurrentUser()) {
+    window.location.href = 'quiz-select.html';
+    return;
+  }
+
+  var loginBtn = document.getElementById('loginBtn');
+  if (!loginBtn) return;
+
+  // Hide error banner initially
+  hideEl('loginError');
+
+  // Wire toggle
+  setupToggle('toggleLoginPassword', 'loginPassword');
+
+  // Submit
+  loginBtn.onclick = function() {
+
+    var email    = (document.getElementById('loginEmail').value    || '').trim().toLowerCase();
+    var password = (document.getElementById('loginPassword').value || '');
+
+    // Clear previous errors
+    clearError('loginEmail');
+    clearError('loginPassword');
+    hideError('loginError');
+
+    if (!email) {
+      showError('loginError', 'Please enter your email address.');
+      markError('loginEmail');
+      return;
+    }
+
+    if (!password) {
+      showError('loginError', 'Please enter your password.');
+      markError('loginPassword');
+      return;
+    }
+
+    var users = getUsers();
+    var user  = null;
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].email === email && users[i].password === password) {
+        user = users[i];
+        break;
+      }
+    }
+
+    if (!user) {
+      showError('loginError',
+        'Incorrect email or password. Please try again.');
+      markError('loginEmail');
+      markError('loginPassword');
+      return;
+    }
+
+    setCurrentUser(user);
+    window.location.href = 'quiz-select.html';
+  };
+}
+
+
+// ─────────────────────────────────────────────
+//  BOOT — detect page and initialise
+// ─────────────────────────────────────────────
+
+(function boot() {
+  var isReady = document.readyState === 'complete' ||
+                document.readyState === 'interactive';
+
+  if (isReady) {
+    run();
+  } else {
+    document.addEventListener('DOMContentLoaded', run);
+  }
+
+  function run() {
+    if (document.getElementById('registerBtn')) initRegister();
+    if (document.getElementById('loginBtn'))    initLogin();
+  }
+})();
