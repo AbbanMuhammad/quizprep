@@ -1,187 +1,159 @@
 // =============================================
-//  QUIZPREP — Shared App Utilities
-//  Stage 7: Dark mode added
+// QUIZPREP — Shared App Utilities (CORRECTED)
+// Fixes: updateNav duplicate cleanup, absolute paths, auth guard support
 // =============================================
-
 // ─────────────────────────────────────────────
-//  STORAGE KEYS
+// STORAGE KEYS
 // ─────────────────────────────────────────────
-
 const KEYS = {
-  users:   'qp_users',
-  current: 'qp_current',
-  theme:   'qp_theme'    // "dark" | "light" | null (use system)
+    users: "qp_users",
+    current: "qp_current",
+    theme: "qp_theme" // "dark" | "light" | null (use system)
 };
-
-
 // ─────────────────────────────────────────────
-//  1. THEME — Apply before page renders
-//  This runs immediately (not inside DOMContentLoaded)
-//  to prevent a flash of the wrong theme
+// 1. THEME — Apply before page renders
 // ─────────────────────────────────────────────
-
 function getSystemPreference() {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
 }
-
 function getSavedTheme() {
-  return localStorage.getItem(KEYS.theme); // "dark" | "light" | null
+    return localStorage.getItem(KEYS.theme);
 }
-
 function applyTheme(theme) {
-  if (theme === 'dark') {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
+    if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+    } else {
+        document.documentElement.classList.remove("dark");
+    }
 }
-
 function getCurrentTheme() {
-  // Saved preference wins; fall back to system preference
-  return getSavedTheme() || getSystemPreference();
+    return getSavedTheme() || getSystemPreference();
 }
-
 function toggleTheme() {
-  const current  = getCurrentTheme();
-  const next     = current === 'dark' ? 'light' : 'dark';
-
-  // Save the user's explicit choice
-  localStorage.setItem(KEYS.theme, next);
-
-  // Apply immediately
-  applyTheme(next);
-
-  // Update every toggle button icon on the page
-  updateToggleIcons(next);
+    const current = getCurrentTheme();
+    const next = current === "dark" ? "light" : "dark";
+    localStorage.setItem(KEYS.theme, next);
+    applyTheme(next);
+    updateToggleIcons(next);
 }
 
 function updateToggleIcons(theme) {
-  document.querySelectorAll('.theme-toggle').forEach(btn => {
-    btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-    btn.setAttribute('aria-label',
-      theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-    );
-  });
+    document.querySelectorAll(".theme-toggle").forEach(btn => {
+        btn.textContent = theme === "dark" ? "☀️" : "🌙";
+        btn.setAttribute(
+            "aria-label",
+            theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+        );
+    });
 }
-
 // ── Apply theme immediately on script load ──
-// This line runs before DOMContentLoaded so there is no flash
 applyTheme(getCurrentTheme());
-
-
 // ─────────────────────────────────────────────
-//  2. AUTH HELPERS
+// 2. AUTH HELPERS
 // ─────────────────────────────────────────────
-
 function getCurrentUser() {
-  return JSON.parse(localStorage.getItem(KEYS.current) || 'null');
-}
-
-function logout() {
-  localStorage.removeItem(KEYS.current);
-  window.location.href = 'login.html';
-}
-
-
-// ─────────────────────────────────────────────
-//  3. NAV — User info + dark mode toggle
-// ─────────────────────────────────────────────
-
-function updateNav() {
-  const user     = getCurrentUser();
-  const navInner = document.querySelector('.nav__inner');
-  if (!navInner) return;
-
-  // Remove any previously inserted nav items to avoid duplicates
-  const existing = navInner.querySelector('.btn--outline, .nav__user');
-  if (existing) existing.remove();
-
-  // Remove existing toggle button if present
-  const existingToggle = navInner.querySelector('.theme-toggle');
-  if (existingToggle) existingToggle.remove();
-
-  // ── Always add the theme toggle ──
-  const toggleBtn = document.createElement('button');
-  toggleBtn.className   = 'theme-toggle';
-  toggleBtn.onclick     = toggleTheme;
-  const theme = getCurrentTheme();
-  toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-  toggleBtn.setAttribute('aria-label',
-    theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-  );
-
-  if (user) {
-    // ── Logged in: My Results + username + logout + toggle ──
-    const userEl = document.createElement('div');
-    userEl.className = 'nav__user';
-    userEl.innerHTML = `
-      <a href="history.html"
-         style="color:rgba(255,255,255,0.85);
-                font-size:var(--fs-sm);
-                font-weight:600;
-                text-decoration:none;
-                margin-right:var(--space-sm);">
-        My Results
-      </a>
-      <span class="nav__username">
-        Hi, <span>${user.name.split(' ')[0]}</span>
-      </span>
-      <button class="btn btn--outline" onclick="logout()">
-        Log Out
-      </button>`;
-
-    navInner.appendChild(toggleBtn);
-    navInner.appendChild(userEl);
-  } else {
-    // ── Logged out: Get Started + toggle ──
-    const link = document.createElement('a');
-    link.href        = 'login.html';
-    link.className   = 'btn btn--outline';
-    link.textContent = 'Get Started';
-
-    navInner.appendChild(toggleBtn);
-    navInner.appendChild(link);
-  }
-}
-
-
-// ─────────────────────────────────────────────
-//  4. SYSTEM THEME CHANGE LISTENER
-//  If the user changes their OS theme while the
-//  app is open AND they haven't set a manual
-//  preference, follow the system change
-// ─────────────────────────────────────────────
-
-window.matchMedia('(prefers-color-scheme: dark)')
-  .addEventListener('change', e => {
-    // Only follow system if no manual override saved
-    if (!getSavedTheme()) {
-      const newTheme = e.matches ? 'dark' : 'light';
-      applyTheme(newTheme);
-      updateToggleIcons(newTheme);
+    try {
+        return JSON.parse(localStorage.getItem(KEYS.current) || "null");
+    } catch (e) {
+        return null;
     }
-  });
-
+}
+function setCurrentUser(u) {
+    localStorage.setItem(KEYS.current, JSON.stringify(u));
+}
+function logout() {
+    localStorage.removeItem(KEYS.current);
+    window.location.href = "/login.html";
+}
+// ─────────────────────────────────────────────
+// 3. NAV — User info + dark mode toggle
+// FIX: Use querySelectorAll to remove ALL existing
+//      nav items, preventing duplicate elements
+// ─────────────────────────────────────────────
+function updateNav() {
+    const user = getCurrentUser();
+    const navInner = document.querySelector(".nav__inner");
+    if (!navInner) return;
+    // FIX: Remove ALL previously inserted nav items (not just the first one)
+    navInner
+        .querySelectorAll(".btn--outline, .nav__user")
+        .forEach(el => el.remove());
+    navInner.querySelectorAll(".theme-toggle").forEach(el => el.remove());
+    // ── Always add the theme toggle ──
+    const toggleBtn = document.createElement("button");
+    toggleBtn.className = "theme-toggle";
+    toggleBtn.onclick = toggleTheme;
+    const theme = getCurrentTheme();
+    toggleBtn.textContent = theme === "dark" ? "☀️" : "🌙";
+    toggleBtn.setAttribute(
+        "aria-label",
+        theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+    );
+    if (user) {
+        // ── Logged in: My Results + username + logout + toggle ──
+        const userEl = document.createElement("div");
+        userEl.className = "nav__user";
+        userEl.innerHTML = `
+      <a href="/history.html" class="nav__results-link">My Results</a>
+      <span class="nav__greeting">Hi, ${user.name.split(" ")[0]}</span>
+      <button class="btn btn--outline btn--sm" onclick="logout()">Log Out</button>
+    `;
+        navInner.appendChild(toggleBtn);
+        navInner.appendChild(userEl);
+    } else {
+        // ── Logged out: Get Started + toggle ──
+        const link = document.createElement("a");
+        link.href = "/login.html";
+        link.className = "btn btn--outline";
+        link.textContent = "Get Started";
+        navInner.appendChild(toggleBtn);
+        navInner.appendChild(link);
+    }
+}
 
 // ─────────────────────────────────────────────
-//  5. RUN ON EVERY PAGE LOAD
+// 4. SYSTEM THEME CHANGE LISTENER
 // ─────────────────────────────────────────────
-
-document.addEventListener('DOMContentLoaded', updateNav);
-
+window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", e => {
+        if (!getSavedTheme()) {
+            const newTheme = e.matches ? "dark" : "light";
+            applyTheme(newTheme);
+            updateToggleIcons(newTheme);
+        }
+    });
 // ─────────────────────────────────────────────
-//  SERVICE WORKER REGISTRATION
+// 5. AUTH GUARD — Protect pages that require login
+// Add data-auth-required="true" to the <body> tag
+// of any page that should redirect to /login.html
+// when the user is not logged in.
 // ─────────────────────────────────────────────
-
+function checkAuthGuard() {
+    if (document.body && document.body.dataset.authRequired === "true") {
+        if (!getCurrentUser()) {
+            window.location.href = "/login.html";
+        }
+    }
+}
+// ─────────────────────────────────────────────
+// 6. RUN ON EVERY PAGE LOAD
+// ─────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", function () {
+    checkAuthGuard();
+    updateNav();
+});
+// ─────────────────────────────────────────────
+// SERVICE WORKER REGISTRATION
+// ─────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('./sw.js')
       .then(reg => {
         console.log('[App] SW registered:', reg.scope);
-
         reg.addEventListener('updatefound', () => {
           const newSW = reg.installing;
           newSW.addEventListener('statechange', () => {
@@ -194,10 +166,8 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error('[App] SW registration failed:', err));
   });
 }
-
 function showUpdateBanner() {
   if (document.getElementById('update-banner')) return;
-
   const banner = document.createElement('div');
   banner.id = 'update-banner';
   banner.style.cssText = `
@@ -220,25 +190,9 @@ function showUpdateBanner() {
     white-space: nowrap;
   `;
   banner.innerHTML = `
-    <span>🎉 A new version is available!</span>
-    <button onclick="location.reload()" style="
-      background: #F5A623;
-      color: #1A5E3A;
-      border: none;
-      padding: 0.4rem 1rem;
-      border-radius: 6px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 13px;
-    ">Update</button>
-    <button onclick="this.parentElement.remove()" style="
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.7);
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 0;
-    ">✕</button>
+    🎉 A new version is available!
+    <button onclick="location.reload()" style="background:#fff;color:#1A5E3A;border:none;padding:0.3rem 0.8rem;border-radius:6px;cursor:pointer;font-weight:600;">Update</button>
+    <button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fff;cursor:pointer;font-size:18px;">✕</button>
   `;
   document.body.appendChild(banner);
 }
