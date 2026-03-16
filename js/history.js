@@ -1,29 +1,9 @@
 // =============================================
 //  QUIZPREP — Score History Logic
-//  Stage 6
 // =============================================
-
-// ─────────────────────────────────────────────
-//  1. AUTH GUARD
-// ─────────────────────────────────────────────
-
-const currentUser = JSON.parse(
-  localStorage.getItem('qp_current') || 'null'
-);
-
-if (!currentUser) {
-  sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-  window.location.href = 'login.html';
-}
-
-
-// ─────────────────────────────────────────────
-//  2. CONSTANTS & HELPERS
-// ─────────────────────────────────────────────
 
 const HISTORY_KEY = 'qp_history';
 
-// Friendly subject display names
 const SUBJECT_NAMES = {
   mathematics: 'Mathematics',
   english:     'English Language',
@@ -36,245 +16,154 @@ const SUBJECT_NAMES = {
 };
 
 function formatTime(seconds) {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${String(s).padStart(2, '0')}`;
+  var m = Math.floor(seconds / 60);
+  var s = seconds % 60;
+  return m + ':' + String(s).padStart(2, '0');
 }
 
-function formatDate(isoString) {
-  const d = new Date(isoString);
-  // e.g. "01 Jun 2025, 21:34"
+function formatDate(iso) {
+  var d = new Date(iso);
   return d.toLocaleDateString('en-GB', {
-    day:   '2-digit',
-    month: 'short',
-    year:  'numeric'
+    day: '2-digit', month: 'short', year: 'numeric'
   }) + ', ' + d.toLocaleTimeString('en-GB', {
-    hour:   '2-digit',
-    minute: '2-digit'
+    hour: '2-digit', minute: '2-digit'
   });
 }
 
-function getPerformanceBand(percent) {
-  if (percent >= 80) return { label: 'Excellent', cls: 'excellent' };
-  if (percent >= 50) return { label: 'Good',      cls: 'good' };
-  return               { label: 'Poor',      cls: 'poor' };
+function getBand(pct) {
+  if (pct >= 80) return { label: 'Excellent', cls: 'excellent' };
+  if (pct >= 50) return { label: 'Good',      cls: 'good' };
+  return               { label: 'Poor',       cls: 'poor' };
 }
 
-// Read all history records for the current user
-function getUserHistory() {
-  const all = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-  return all.filter(r => r.userId === currentUser.id);
+function getAllHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+  } catch(e) { return []; }
 }
 
-
-// ─────────────────────────────────────────────
-//  3. SAVE A RESULT (called from results.js)
-//  We expose this as a global so results.js can call it
-// ─────────────────────────────────────────────
-
-function saveResult(subject, score, total, timeTaken) {
-  const percent = Math.round((score / total) * 100);
-
-  const record = {
-    userId:    currentUser.id,
-    subject,
-    score,
-    total,
-    percent,
-    timeTaken,
-    date: new Date().toISOString()
-  };
-
-  const all = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-  all.push(record);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(all));
-}
-
-
-// ─────────────────────────────────────────────
-//  4. SUMMARY STATS
-// ─────────────────────────────────────────────
-
+// ── Summary stats ─────────────────────────────
 function renderStats(records) {
-  const total = records.length;
+  document.getElementById('hsTotalQuizzes').textContent = records.length;
 
-  document.getElementById('hsTotalQuizzes').textContent = total;
-
-  if (total === 0) {
-    document.getElementById('hsAvgScore').textContent  = '—';
-    document.getElementById('hsBestScore').textContent = '—';
+  if (records.length === 0) {
+    document.getElementById('hsAvgScore').textContent   = '—';
+    document.getElementById('hsBestScore').textContent  = '—';
     document.getElementById('hsFavSubject').textContent = '—';
     return;
   }
 
-  // Average score
-  const avg = Math.round(
-    records.reduce((sum, r) => sum + r.percent, 0) / total
+  var avg = Math.round(
+    records.reduce(function(sum, r) { return sum + r.percent; }, 0) /
+    records.length
   );
-  document.getElementById('hsAvgScore').textContent = avg + '%';
+  document.getElementById('hsAvgScore').textContent =  avg + '%';
 
-  // Best score
-  const best = Math.max(...records.map(r => r.percent));
+  var best = Math.max.apply(null, records.map(function(r) { return r.percent; }));
   document.getElementById('hsBestScore').textContent = best + '%';
 
-  // Most practised subject
-  // Count how many times each subject appears
-  const counts = {};
-  records.forEach(r => {
+  var counts = {};
+  records.forEach(function(r) {
     counts[r.subject] = (counts[r.subject] || 0) + 1;
   });
-
-  // Find the subject with the highest count
-  const favourite = Object.entries(counts)
-    .sort((a, b) => b[1] - a[1])[0][0];
-
+  var fav = Object.keys(counts).sort(function(a, b) {
+    return counts[b] - counts[a];
+  })[0];
   document.getElementById('hsFavSubject').textContent =
-    SUBJECT_NAMES[favourite] || favourite;
+    SUBJECT_NAMES[fav] || fav;
 }
 
-
-// ─────────────────────────────────────────────
-//  5. RENDER TABLE ROWS
-// ─────────────────────────────────────────────
-
+// ── Render table ──────────────────────────────
 function renderTable(records) {
-  const tbody      = document.getElementById('historyBody');
-  const emptyState = document.getElementById('historyEmpty');
-  const tableWrap  = document.querySelector('.history-table-wrap');
+  var tbody     = document.getElementById('historyBody');
+  var emptyEl   = document.getElementById('historyEmpty');
+  var tableWrap = document.querySelector('.history-table-wrap');
 
   if (records.length === 0) {
     tableWrap.classList.add('hidden');
-    emptyState.classList.remove('hidden');
+    emptyEl.classList.remove('hidden');
     return;
   }
 
   tableWrap.classList.remove('hidden');
-  emptyState.classList.add('hidden');
+  emptyEl.classList.add('hidden');
 
-  let html = '';
+  var html = '';
+  records.forEach(function(r, i) {
+    var band    = getBand(r.percent);
+    var subject = SUBJECT_NAMES[r.subject] || r.subject;
 
-  records.forEach((r, i) => {
-    const band    = getPerformanceBand(r.percent);
-    const subject = SUBJECT_NAMES[r.subject] || r.subject;
-
-    html += `
-      <tr>
-        <td>${i + 1}</td>
-        <td class="td-subject">${subject}</td>
-        <td class="td-score">${r.score} / ${r.total}</td>
-        <td>
-          <span class="result-badge ${band.cls}">
-            ${r.percent}% — ${band.label}
-          </span>
-        </td>
-        <td>${formatTime(r.timeTaken)}</td>
-        <td>${formatDate(r.date)}</td>
-        <td>
-          <button class="retake-link"
-                  onclick="retakeSubject('${r.subject}')">
-            Retake
-          </button>
-        </td>
-      </tr>`;
+    html +=
+      '<tr>' +
+      '<td>' + (i + 1) + '</td>' +
+      '<td class="td-subject">' + subject + '</td>' +
+      '<td class="td-score">' + r.score + ' / ' + r.total + '</td>' +
+      '<td><span class="result-badge ' + band.cls + '">' +
+        r.percent + '% — ' + band.label +
+      '</span></td>' +
+      '<td>' + formatTime(r.timeTaken) + '</td>' +
+      '<td>' + formatDate(r.date) + '</td>' +
+      '<td><button class="retake-link" onclick="retakeSubject(\'' +
+        r.subject + '\')">Retake</button></td>' +
+      '</tr>';
   });
 
   tbody.innerHTML = html;
 }
 
-
-// ─────────────────────────────────────────────
-//  6. APPLY FILTERS AND SORT
-// ─────────────────────────────────────────────
-
+// ── Filters ───────────────────────────────────
 function applyFilters() {
-  const subjectVal = document.getElementById('subjectFilter').value;
-  const sortVal    = document.getElementById('sortOrder').value;
+  var subjectVal = document.getElementById('subjectFilter').value;
+  var sortVal    = document.getElementById('sortOrder').value;
+  var records    = getAllHistory();
 
-  // Start with this user's full history
-  let records = getUserHistory();
-
-  // Filter by subject
   if (subjectVal !== 'all') {
-    records = records.filter(r => r.subject === subjectVal);
+    records = records.filter(function(r) { return r.subject === subjectVal; });
   }
 
-  // Sort
   switch (sortVal) {
     case 'newest':
-      records.sort((a, b) => new Date(b.date) - new Date(a.date));
+      records.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
       break;
     case 'oldest':
-      records.sort((a, b) => new Date(a.date) - new Date(b.date));
+      records.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
       break;
     case 'highest':
-      records.sort((a, b) => b.percent - a.percent);
+      records.sort(function(a, b) { return b.percent - a.percent; });
       break;
     case 'lowest':
-      records.sort((a, b) => a.percent - b.percent);
+      records.sort(function(a, b) { return a.percent - b.percent; });
       break;
   }
 
   renderTable(records);
 }
 
-
-// ─────────────────────────────────────────────
-//  7. RETAKE A SUBJECT FROM HISTORY
-// ─────────────────────────────────────────────
-
+// ── Retake ────────────────────────────────────
 function retakeSubject(subject) {
   sessionStorage.setItem('selectedSubject', subject);
   window.location.href = 'quiz.html';
 }
 
-
-// ─────────────────────────────────────────────
-//  8. CLEAR HISTORY
-// ─────────────────────────────────────────────
-
-document.getElementById('clearBtn').addEventListener('click', () => {
-  if (!confirm(
-    'Are you sure you want to delete all your quiz history? This cannot be undone.'
-  )) return;
-
-  // Remove only this user's records — keep other users' data intact
-  const all     = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-  const others  = all.filter(r => r.userId !== currentUser.id);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(others));
-
-  // Re-render the page
+// ── Clear history ─────────────────────────────
+document.getElementById('clearBtn').addEventListener('click', function() {
+  if (!confirm('Are you sure you want to delete all quiz history? This cannot be undone.')) return;
+  localStorage.removeItem(HISTORY_KEY);
   init();
 });
 
+document.getElementById('subjectFilter').addEventListener('change', applyFilters);
+document.getElementById('sortOrder').addEventListener('change', applyFilters);
 
-// ─────────────────────────────────────────────
-//  9. FILTER & SORT LISTENERS
-// ─────────────────────────────────────────────
-
-document.getElementById('subjectFilter')
-  .addEventListener('change', applyFilters);
-
-document.getElementById('sortOrder')
-  .addEventListener('change', applyFilters);
-
-
-// ─────────────────────────────────────────────
-//  10. INITIALISE
-// ─────────────────────────────────────────────
-
+// ── Init ─────────────────────────────────────
 function init() {
-  const allRecords = getUserHistory();
-
-  // Update subtitle
+  var all = getAllHistory();
   document.getElementById('historySubtitle').textContent =
-    allRecords.length === 0
+    all.length === 0
       ? 'You have not completed any quizzes yet.'
-      : `You have completed ${allRecords.length} quiz${allRecords.length > 1 ? 'zes' : ''}.`;
-
-  // Render summary stats using the full unfiltered data
-  renderStats(allRecords);
-
-  // Render the table (sorted newest first by default)
+      : 'You have completed ' + all.length + ' quiz' +
+        (all.length > 1 ? 'zes' : '') + '.';
+  renderStats(all);
   applyFilters();
 }
 
