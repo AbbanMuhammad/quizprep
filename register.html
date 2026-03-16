@@ -1,123 +1,137 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register | QuizPrep</title>
-  <!-- In login.html and register.html — add inside <head> -->
-<script src="js/app.js"></script>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/auth.css">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1A5E3A">
-  <meta name="description" content="Create a free QuizPrep account and start your exam preparation.">
-<meta property="og:title" content="Register | QuizPrep">
-<meta property="og:type" content="website">
-</head>
-<body class="auth-page">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Register | QuizPrep</title>
+        <link rel="manifest" href="manifest.json" />
+        <meta name="theme-color" content="#1A5E3A" />
+        <meta
+            name="description"
+            content="Create a free QuizPrep account and start your exam preparation."
+        />
+        <meta property="og:title" content="Register | QuizPrep|
+        <meta property="og:type" content="website" />
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/auth.css" />
+    </head>
+    <body class="auth-page">
+        <nav class="nav">
+            <div class="container nav__inner">
+                <a
+                    href="index.html"
+                    class="nav__logo"
+                    aria-label="QuizPrep home"
+                >
+                    Quiz<span>Prep</span>
+                </a>
+            </div>
+        </nav>
 
-  <!-- ── Navigation ── -->
-  <nav class="nav">
-    <div class="container nav__inner">
-      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
-    </div>
-  </nav>
+        <main class="auth-main">
+            <div class="auth-card">
+                <div class="auth-card__header">
+                    <div class="auth-icon">🚀</div>
+                    <h1 class="auth-card__title">Create Account</h1>
+                    <p class="auth-card__sub">
+                        Start your exam preparation journey
+                    </p>
+                </div>
 
-  <main class="auth-main">
-    <div class="auth-card">
+                <div class="auth-error hidden" id="registerError"></div>
+                <div class="auth-success hidden" id="registerSuccess"></div>
 
-      <!-- Header -->
-      <div class="auth-card__header">
-        <div class="auth-icon">🚀</div>
-        <h1 class="auth-card__title">Create Account</h1>
-        <p class="auth-card__sub">Start your exam preparation journey</p>
-      </div>
+                <div class="auth-form" id="registerForm">
+                    <div class="form-group">
+                        <label class="form-label" for="regName"
+                            >Full Name</label
+                        >
+                        <input
+                            class="form-input"
+                            type="text"
+                            id="regName"
+                            placeholder="e.g. Sani Ismail"
+                            autocomplete="name"
+                        />
+                    </div>
 
-      <!-- Error banner -->
-      <div class="auth-error hidden" id="registerError"></div>
+                    <div class="form-group">
+                        <label class="form-label" for="regEmail"
+                            >Email Address</label
+                        >
+                        <input
+                            class="form-input"
+                            type="email"
+                            id="regEmail"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                        />
+                    </div>
 
-      <!-- Success banner -->
-      <div class="auth-success hidden" id="registerSuccess"></div>
+                    <div class="form-group">
+                        <label class="form-label" for="regPassword"
+                            >Password</label
+                        >
+                        <div class="input-wrap">
+                            <input
+                                class="form-input"
+                                type="password"
+                                id="regPassword"
+                                placeholder="At least 6 characters"
+                                autocomplete="new-password"
+                            />
+                            <button
+                                class="toggle-pw"
+                                type="button"
+                                id="toggleRegPassword"
+                            >
+                                👁
+                            </button>
+                        </div>
+                        <div class="strength-bar" id="strengthBar">
+                            <div
+                                class="strength-bar__fill"
+                                id="strengthFill"
+                            ></div>
+                        </div>
+                        <p class="strength-label" id="strengthLabel"></p>
+                    </div>
 
-      <!-- Form -->
-      <div class="auth-form" id="registerForm">
+                    <div class="form-group">
+                        <label class="form-label" for="regConfirm"
+                            >Confirm Password</label
+                        >
+                        <div class="input-wrap">
+                            <input
+                                class="form-input"
+                                type="password"
+                                id="regConfirm"
+                                placeholder="Repeat your password"
+                                autocomplete="new-password"
+                            />
+                            <button
+                                class="toggle-pw"
+                                type="button"
+                                id="toggleRegConfirm"
+                            >
+                                👁
+                            </button>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-          <label class="form-label" for="regName">Full Name</label>
-          <input
-            class="form-input"
-            type="text"
-            id="regName"
-            placeholder="e.g. Sani Ismail"
-            autocomplete="name"
-          >
-        </div>
+                    <button class="btn btn--primary btn--full" id="registerBtn">
+                        Create Account
+                    </button>
+                </div>
 
-        <div class="form-group">
-          <label class="form-label" for="regEmail">Email Address</label>
-          <input
-            class="form-input"
-            type="email"
-            id="regEmail"
-            placeholder="you@example.com"
-            autocomplete="email"
-          >
-        </div>
+                <p class="auth-card__footer">
+                    Already have an account?
+                    <a href="login.html" class="auth-link">Log in</a>
+                </p>
+            </div>
+        </main>
 
-        <div class="form-group">
-          <label class="form-label" for="regPassword">Password</label>
-          <div class="input-wrap">
-            <input
-              class="form-input"
-              type="password"
-              id="regPassword"
-              placeholder="At least 6 characters"
-              autocomplete="new-password"
-            >
-            <button class="toggle-pw" type="button"
-                    onclick="togglePassword('regPassword', this)">
-              👁
-            </button>
-          </div>
-          <!-- Password strength bar -->
-          <div class="strength-bar" id="strengthBar">
-            <div class="strength-bar__fill" id="strengthFill"></div>
-          </div>
-          <p class="strength-label" id="strengthLabel"></p>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="regConfirm">Confirm Password</label>
-          <div class="input-wrap">
-            <input
-              class="form-input"
-              type="password"
-              id="regConfirm"
-              placeholder="Repeat your password"
-              autocomplete="new-password"
-            >
-            <button class="toggle-pw" type="button"
-                    onclick="togglePassword('regConfirm', this)">
-              👁
-            </button>
-          </div>
-        </div>
-
-        <button class="btn btn--primary btn--full" id="registerBtn">
-          Create Account
-        </button>
-
-      </div>
-
-      <!-- Footer link -->
-      <p class="auth-card__footer">
-        Already have an account?
-        <a href="login.html" class="auth-link">Log in</a>
-      </p>
-
-    </div>
-  </main>
-
-  <script src="js/auth.js"></script>
-</body>
+        <script src="js/app.js"></script>
+        <script src="js/auth.js"></script>
+    </body>
 </html>

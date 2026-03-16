@@ -4,39 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | QuizPrep</title>
-  <!-- In login.html and register.html — add inside <head> -->
-<script src="js/app.js"></script>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/auth.css">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1A5E3A">
   <meta name="description" content="Log in to your QuizPrep account and continue practising.">
-<meta property="og:title" content="Login | QuizPrep">
-<meta property="og:type" content="website">
+  <meta property="og:title" content="Login | QuizPrep">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
 </head>
 <body class="auth-page">
 
-  <!-- ── Navigation ── -->
   <nav class="nav">
     <div class="container nav__inner">
-      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
+      <a href="index.html" class="nav__logo" aria-label="QuizPrep home">
+        Quiz<span>Prep</span>
+      </a>
     </div>
   </nav>
 
   <main class="auth-main">
     <div class="auth-card">
 
-      <!-- Header -->
       <div class="auth-card__header">
         <div class="auth-icon">🎓</div>
         <h1 class="auth-card__title">Welcome Back</h1>
         <p class="auth-card__sub">Log in to continue practising</p>
       </div>
 
-      <!-- Error banner — hidden by default -->
       <div class="auth-error hidden" id="loginError"></div>
 
-      <!-- Form -->
       <div class="auth-form" id="loginForm">
 
         <div class="form-group">
@@ -60,8 +56,7 @@
               placeholder="Enter your password"
               autocomplete="current-password"
             >
-            <button class="toggle-pw" type="button"
-                    onclick="togglePassword('loginPassword', this)">
+            <button class="toggle-pw" type="button" id="toggleLoginPassword">
               👁
             </button>
           </div>
@@ -73,7 +68,6 @@
 
       </div>
 
-      <!-- Footer link -->
       <p class="auth-card__footer">
         Don't have an account?
         <a href="register.html" class="auth-link">Create one</a>
@@ -82,6 +76,7 @@
     </div>
   </main>
 
+  <script src="js/app.js"></script>
   <script src="js/auth.js"></script>
 </body>
 </html>

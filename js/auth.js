@@ -1,104 +1,31 @@
 // =============================================
 //  QUIZPREP — Authentication Logic
-//  Stage 5
 // =============================================
 
 // ─────────────────────────────────────────────
-//  STORAGE KEYS
-//  Centralise key names so a typo in one place
-//  doesn't silently break another
+//  1. STORAGE HELPERS
+//  KEYS, getCurrentUser and logout live in
+//  app.js — we only define what's unique here
 // ─────────────────────────────────────────────
 
-const KEYS = {
-  users:   'qp_users',    // array of all registered users
-  current: 'qp_current'  // the currently logged-in user object
-};
-
-
-// ─────────────────────────────────────────────
-//  1. LOW-LEVEL HELPERS
-// ─────────────────────────────────────────────
-
-// Get all registered users from localStorage
-// Returns an empty array if none exist yet
 function getUsers() {
-  return JSON.parse(localStorage.getItem(KEYS.users) || '[]');
+  return JSON.parse(localStorage.getItem('qp_users') || '[]');
 }
 
-// Save the full users array back to localStorage
 function saveUsers(users) {
-  localStorage.setItem(KEYS.users, JSON.stringify(users));
+  localStorage.setItem('qp_users', JSON.stringify(users));
 }
 
-// Get the currently logged-in user (or null)
-function getCurrentUser() {
-  return JSON.parse(localStorage.getItem(KEYS.current) || 'null');
-}
-
-// Log a user in by saving them as the current user
 function setCurrentUser(user) {
-  localStorage.setItem(KEYS.current, JSON.stringify(user));
-}
-
-// Log out — remove the current user from localStorage
-function logout() {
-  localStorage.removeItem(KEYS.current);
-  window.location.href = 'login.html';
+  localStorage.setItem('qp_current', JSON.stringify(user));
 }
 
 
 // ─────────────────────────────────────────────
-//  2. ROUTE PROTECTION
-//  Call this at the top of any page that requires login
-// ─────────────────────────────────────────────
-
-function requireAuth() {
-  const user = getCurrentUser();
-  if (!user) {
-    // Save the page they tried to visit so we can
-    // redirect back after login
-    sessionStorage.setItem('redirectAfterLogin',
-                           window.location.pathname);
-    window.location.href = 'login.html';
-  }
-  return user;
-}
-
-
-// ─────────────────────────────────────────────
-//  3. NAV BAR — Show username when logged in
-//  Call this on every protected page
-// ─────────────────────────────────────────────
-
-function updateNav() {
-  const user    = getCurrentUser();
-  const navInner = document.querySelector('.nav__inner');
-  if (!navInner || !user) return;
-
-  // Replace the "Get Started" button with username + logout
-  const existing = navInner.querySelector('.btn--outline, .nav__user');
-  if (existing) existing.remove();
-
-  const userEl = document.createElement('div');
-  userEl.className = 'nav__user';
-  userEl.innerHTML = `
-    <span class="nav__username">
-      Hi, <span>${user.name.split(' ')[0]}</span>
-    </span>
-    <button class="btn btn--outline" onclick="logout()">
-      Log Out
-    </button>`;
-
-  navInner.appendChild(userEl);
-}
-
-
-// ─────────────────────────────────────────────
-//  4. VALIDATION HELPERS
+//  2. VALIDATION HELPERS
 // ─────────────────────────────────────────────
 
 function validateEmail(email) {
-  // Basic email pattern — has text, @, domain, dot, extension
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
@@ -106,7 +33,6 @@ function validatePassword(password) {
   return password.length >= 6;
 }
 
-// Show an error banner
 function showError(elementId, message) {
   const el = document.getElementById(elementId);
   if (!el) return;
@@ -114,13 +40,11 @@ function showError(elementId, message) {
   el.classList.remove('hidden');
 }
 
-// Hide an error banner
 function hideError(elementId) {
   const el = document.getElementById(elementId);
   if (el) el.classList.add('hidden');
 }
 
-// Show a success banner
 function showSuccess(elementId, message) {
   const el = document.getElementById(elementId);
   if (!el) return;
@@ -128,7 +52,6 @@ function showSuccess(elementId, message) {
   el.classList.remove('hidden');
 }
 
-// Mark an input as having an error (red border)
 function setInputError(inputId, hasError) {
   const el = document.getElementById(inputId);
   if (!el) return;
@@ -141,19 +64,17 @@ function setInputError(inputId, hasError) {
 
 
 // ─────────────────────────────────────────────
-//  5. PASSWORD STRENGTH METER
+//  3. PASSWORD STRENGTH METER
 // ─────────────────────────────────────────────
 
 function checkStrength(password) {
   let score = 0;
-
-  if (password.length >= 6)  score++;   // minimum length
-  if (password.length >= 10) score++;   // good length
-  if (/[A-Z]/.test(password)) score++; // has uppercase
-  if (/[0-9]/.test(password)) score++; // has number
-  if (/[^A-Za-z0-9]/.test(password)) score++; // has symbol
-
-  return score; // 0–5
+  if (password.length >= 6)          score++;
+  if (password.length >= 10)         score++;
+  if (/[A-Z]/.test(password))        score++;
+  if (/[0-9]/.test(password))        score++;
+  if (/[^A-Za-z0-9]/.test(password)) score++;
+  return score;
 }
 
 function updateStrengthUI(password) {
@@ -161,8 +82,7 @@ function updateStrengthUI(password) {
   const label = document.getElementById('strengthLabel');
   if (!fill || !label) return;
 
-  const score = checkStrength(password);
-
+  const score  = checkStrength(password);
   const levels = [
     { pct: 0,   color: '',        text: '' },
     { pct: 20,  color: '#ef4444', text: 'Very weak' },
@@ -172,7 +92,7 @@ function updateStrengthUI(password) {
     { pct: 100, color: '#15803d', text: 'Very strong' },
   ];
 
-  const level = levels[score];
+  const level       = levels[score];
   fill.style.width      = level.pct + '%';
   fill.style.background = level.color;
   label.textContent     = level.text;
@@ -181,25 +101,28 @@ function updateStrengthUI(password) {
 
 
 // ─────────────────────────────────────────────
-//  6. PASSWORD VISIBILITY TOGGLE
+//  4. PASSWORD VISIBILITY TOGGLE
 // ─────────────────────────────────────────────
 
-window.togglePassword = function(inputId, btn) {
+function setupToggle(btnId, inputId) {
+  const btn   = document.getElementById(btnId);
   const input = document.getElementById(inputId);
-  if (!input) return;
+  if (!btn || !input) return;
 
-  if (input.type === 'password') {
-    input.type = 'text';
-    btn.textContent = '🙈';
-  } else {
-    input.type = 'password';
-    btn.textContent = '👁';
-  }
+  btn.addEventListener('click', function () {
+    if (input.type === 'password') {
+      input.type      = 'text';
+      btn.textContent = '🙈';
+    } else {
+      input.type      = 'password';
+      btn.textContent = '👁';
+    }
+  });
 }
 
 
 // ─────────────────────────────────────────────
-//  7. REGISTER LOGIC
+//  5. REGISTER LOGIC
 // ─────────────────────────────────────────────
 
 function initRegister() {
@@ -209,16 +132,20 @@ function initRegister() {
   const confirmInput  = document.getElementById('regConfirm');
   const registerBtn   = document.getElementById('registerBtn');
 
-  if (!registerBtn) return; // not on register page
+  if (!registerBtn) return;
 
-  // Live password strength as user types
+  // Password toggles
+  setupToggle('toggleRegPassword', 'regPassword');
+  setupToggle('toggleRegConfirm',  'regConfirm');
+
+  // Live strength meter
   passwordInput.addEventListener('input', () => {
     updateStrengthUI(passwordInput.value);
     setInputError('regPassword', false);
     hideError('registerError');
   });
 
-  // Clear error styling on input
+  // Clear errors on input
   [nameInput, emailInput, confirmInput].forEach(input => {
     input.addEventListener('input', () => {
       setInputError(input.id, false);
@@ -233,7 +160,6 @@ function initRegister() {
     const password = passwordInput.value;
     const confirm  = confirmInput.value;
 
-    // ── Validate ──
     if (!name) {
       showError('registerError', 'Please enter your full name.');
       setInputError('regName', true);
@@ -258,8 +184,7 @@ function initRegister() {
       return;
     }
 
-    // ── Check for existing account ──
-    const users = getUsers();
+    const users  = getUsers();
     const exists = users.find(u => u.email === email);
 
     if (exists) {
@@ -269,27 +194,22 @@ function initRegister() {
       return;
     }
 
-    // ── Save new user ──
     const newUser = {
-      id:        Date.now(), // simple unique ID
+      id:        Date.now(),
       name,
       email,
-      password,  // NOTE: plaintext is fine for a localStorage demo.
-                 // In a real app you would hash this server-side.
+      password,
       createdAt: new Date().toISOString()
     };
 
     users.push(newUser);
     saveUsers(users);
-
-    // ── Auto-login and redirect ──
     setCurrentUser(newUser);
 
     showSuccess('registerSuccess',
       'Account created! Redirecting you to the quiz...');
     hideError('registerError');
 
-    // Brief pause so the user can read the success message
     setTimeout(() => {
       const redirect =
         sessionStorage.getItem('redirectAfterLogin') || 'quiz-select.html';
@@ -301,12 +221,11 @@ function initRegister() {
 
 
 // ─────────────────────────────────────────────
-//  8. LOGIN LOGIC
+//  6. LOGIN LOGIC
 // ─────────────────────────────────────────────
 
 function initLogin() {
-  // If the user is already logged in, skip the login page
-  if (getCurrentUser()) {
+  if (JSON.parse(localStorage.getItem('qp_current') || 'null')) {
     window.location.href = 'quiz-select.html';
     return;
   }
@@ -315,7 +234,10 @@ function initLogin() {
   const passwordInput = document.getElementById('loginPassword');
   const loginBtn      = document.getElementById('loginBtn');
 
-  if (!loginBtn) return; // not on login page
+  if (!loginBtn) return;
+
+  // Password toggle
+  setupToggle('toggleLoginPassword', 'loginPassword');
 
   // Clear errors on input
   [emailInput, passwordInput].forEach(input => {
@@ -325,7 +247,7 @@ function initLogin() {
     });
   });
 
-  // Allow Enter key to submit
+  // Enter key submits
   [emailInput, passwordInput].forEach(input => {
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter') loginBtn.click();
@@ -337,7 +259,6 @@ function initLogin() {
     const email    = emailInput.value.trim().toLowerCase();
     const password = passwordInput.value;
 
-    // ── Validate fields are not empty ──
     if (!email) {
       showError('loginError', 'Please enter your email address.');
       setInputError('loginEmail', true);
@@ -350,7 +271,6 @@ function initLogin() {
       return;
     }
 
-    // ── Find matching user ──
     const users = getUsers();
     const user  = users.find(
       u => u.email === email && u.password === password
@@ -364,7 +284,6 @@ function initLogin() {
       return;
     }
 
-    // ── Log in and redirect ──
     setCurrentUser(user);
 
     const redirect =
@@ -374,10 +293,9 @@ function initLogin() {
   });
 }
 
+
 // ─────────────────────────────────────────────
-//  AUTO-INITIALISE
-//  Detect which page we're on and run the
-//  right init function automatically
+//  7. AUTO-INITIALISE
 // ─────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
