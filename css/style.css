@@ -70,64 +70,31 @@
 }
 
 /* =============================================
-   DARK MODE — Deep Navy (GitHub style)
+   DARK MODE COMPONENT OVERRIDES
    ============================================= */
-
-:root.dark {
-  /* Brand */
-  --color-primary:       #3fb950;
-  --color-primary-light: #2ea043;
-  --color-accent:        #f0883e;
-  --color-accent-dark:   #db6d28;
-
-  /* Surfaces */
-  --color-bg:            #0d1117;
-  --color-bg-alt:        #161b22;
-  --color-border:        #30363d;
-
-  /* Text */
-  --color-text:          #e6edf3;
-  --color-text-muted:    #8b949e;
-  --color-white:         #e6edf3;
-
-  /* Shadow */
-  --shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
-}
 
 /* ── Navigation ── */
 :root.dark .nav {
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
+    background: #111827;
+    border-bottom: 1px solid var(--color-border);
 }
 
 /* ── Buttons ── */
 :root.dark .btn--outline {
-  color: #e6edf3;
-  border-color: #30363d;
+    color: var(--color-white);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 :root.dark .btn--outline:hover {
-  background: #21262d;
-  color: #e6edf3;
-  border-color: #8b949e;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-white);
 }
 
 :root.dark .btn--outline-dark {
-  color: #e6edf3;
-  border-color: #30363d;
+    color: var(--color-text);
+    border-color: var(--color-border);
 }
 :root.dark .btn--outline-dark:hover {
-  background: #21262d;
-  border-color: #8b949e;
-}
-
-:root.dark .btn--primary {
-  background: #238636;
-  border-color: #238636;
-  color: #ffffff;
-}
-:root.dark .btn--primary:hover {
-  background: #2ea043;
-  border-color: #2ea043;
+    background: var(--color-bg-alt);
 }
 
 /* ── Cards ── */
@@ -135,371 +102,136 @@
 :root.dark .feature__card,
 :root.dark .subject-card,
 :root.dark .quiz-card,
+:root.dark .auth-card,
 :root.dark .hist-stat-card,
 :root.dark .modal {
-  background: #161b22;
-  border-color: #30363d;
-}
-
-:root.dark .how__card:hover,
-:root.dark .feature__card:hover,
-:root.dark .subject-card:hover {
-  border-color: #3fb950;
-  box-shadow: 0 0 0 1px #3fb950;
-}
-
-/* ── Hero and section headers ── */
-:root.dark .hero,
-:root.dark .qs-header,
-:root.dark .score-hero,
-:root.dark .history-header {
-  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
-  border-bottom: 1px solid #30363d;
-}
-
-/* ── How It Works background ── */
-:root.dark .how {
-  background: #0d1117;
-}
-
-/* ── Section numbers ── */
-:root.dark .how__num {
-  background: #238636;
-}
-
-/* ── Quiz top bar ── */
-:root.dark .quiz-topbar {
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
-}
-
-:root.dark .timer {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid #30363d;
-}
-
-:root.dark .timer.danger {
-  background: rgba(248, 81, 73, 0.15);
-  border-color: #f85149;
-}
-
-:root.dark .timer.danger .timer__display {
-  color: #f85149;
-}
-
-/* ── Progress bar ── */
-:root.dark .quiz-progress {
-  background: #21262d;
+    background: #1e2537;
+    border-color: var(--color-border);
 }
 
 /* ── Quiz options ── */
 :root.dark .option-btn {
-  background: #161b22;
-  border-color: #30363d;
-  color: #e6edf3;
+    background: #1e2537;
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
-
 :root.dark .option-btn:hover {
-  background: #21262d;
-  border-color: #8b949e;
+    background: #252d42;
+    border-color: var(--color-primary);
 }
-
 :root.dark .option-btn.selected {
-  background: rgba(63, 185, 80, 0.1);
-  border-color: #3fb950;
-  color: #3fb950;
+    background: rgba(74, 222, 128, 0.1);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
 }
-
 :root.dark .option-btn.selected .option-label {
-  background: #238636;
-  border-color: #238636;
-  color: #ffffff;
-}
-
-:root.dark .option-label {
-  border-color: #30363d;
-  color: #8b949e;
-}
-
-/* ── Quiz main area ── */
-:root.dark .quiz-main {
-  background: #0d1117;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #0f1117;
 }
 
 /* ── Form inputs ── */
 :root.dark .form-input {
-  background: #0d1117;
-  border-color: #30363d;
-  color: #e6edf3;
+    background: #1e2537;
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
-
 :root.dark .form-input:focus {
-  border-color: #3fb950;
-  box-shadow: 0 0 0 3px rgba(63, 185, 80, 0.12);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
 }
-
 :root.dark .form-input::placeholder {
-  color: #484f58;
+    color: #4a5568;
 }
 
 /* ── Select dropdowns ── */
 :root.dark .history-select {
-  background: #161b22;
-  border-color: #30363d;
-  color: #e6edf3;
-}
-
-:root.dark .history-select:focus {
-  border-color: #3fb950;
+    background: #1e2537;
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 
 /* ── Table ── */
-:root.dark .history-table-wrap {
-  border-color: #30363d;
-}
-
 :root.dark .history-table thead tr {
-  background: #161b22;
+    background: #111827;
 }
-
-:root.dark .history-table th {
-  color: #8b949e;
-  border-bottom: 1px solid #30363d;
-}
-
-:root.dark .history-table tbody tr {
-  border-color: #21262d;
-}
-
 :root.dark .history-table tbody tr:hover {
-  background: #161b22;
+    background: #1e2537;
 }
-
-:root.dark .history-table td {
-  color: #e6edf3;
-}
-
-/* ── Stats bar ── */
-:root.dark .stats-bar,
-:root.dark .hist-stats {
-  background: #161b22;
-  border-color: #30363d;
-}
-
-:root.dark .stat__value,
-:root.dark .hist-stat__value {
-  color: #3fb950;
+:root.dark .history-table-wrap {
+    border-color: var(--color-border);
 }
 
 /* ── Review cards ── */
 :root.dark .review-card {
-  background: #161b22;
-  border-color: #30363d;
+    background: #1e2537;
+    border-color: var(--color-border);
 }
-
 :root.dark .review-card__header {
-  background: #0d1117;
+    background: #252d42;
 }
-
-:root.dark .review-card__header:hover {
-  background: #161b22;
-}
-
-:root.dark .review-card__question {
-  color: #e6edf3;
-}
-
 :root.dark .review-option {
-  background: #0d1117;
-  border-color: #30363d;
-  color: #e6edf3;
+    background: #1e2537;
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 
-:root.dark .review-option.is-correct {
-  background: rgba(63, 185, 80, 0.1);
-  border-color: #3fb950;
-  color: #3fb950;
-}
-
-:root.dark .review-option.user-wrong {
-  background: rgba(248, 81, 73, 0.1);
-  border-color: #f85149;
-  color: #f85149;
-}
-
-:root.dark .review-badge.correct {
-  background: rgba(63, 185, 80, 0.15);
-  color: #3fb950;
-}
-
-:root.dark .review-badge.wrong {
-  background: rgba(248, 81, 73, 0.15);
-  color: #f85149;
-}
-
-:root.dark .review-badge.skipped {
-  background: rgba(210, 153, 34, 0.15);
-  color: #d29922;
-}
-
-/* ── Score ring ── */
+/* ── Score ring track ── */
 :root.dark .score-ring__track {
-  stroke: #21262d;
+    stroke: rgba(255, 255, 255, 0.08);
 }
 
-:root.dark .score-ring__raw {
-  color: #8b949e;
-}
-
-/* ── Modal ── */
+/* ── Modal overlay ── */
 :root.dark .modal-overlay {
-  background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.7);
 }
 
-:root.dark .modal {
-  background: #161b22;
-  border: 1px solid #30363d;
-}
-
-:root.dark .modal__title {
-  color: #e6edf3;
-}
-
-/* ── Filter buttons ── */
+/* ── Filter buttons (quiz select + results) ── */
 :root.dark .filter-btn,
 :root.dark .review-filter {
-  border-color: #30363d;
-  color: #8b949e;
-  background: transparent;
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
 }
-
-:root.dark .filter-btn:hover,
-:root.dark .review-filter:hover {
-  border-color: #8b949e;
-  color: #e6edf3;
-}
-
 :root.dark .filter-btn.active,
 :root.dark .review-filter.active {
-  background: #238636;
-  border-color: #238636;
-  color: #ffffff;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #0f1117;
 }
 
 /* ── Auth pages ── */
 :root.dark .auth-page {
-  background: #0d1117;
+    background: #0f1117;
 }
-
-:root.dark .auth-card {
-  background: #161b22;
-  border-color: #30363d;
-}
-
-:root.dark .auth-card__title {
-  color: #e6edf3;
-}
-
 :root.dark .auth-error {
-  background: rgba(248, 81, 73, 0.1);
-  border-color: rgba(248, 81, 73, 0.3);
-  color: #f85149;
+    background: rgba(220, 38, 38, 0.15);
+    border-color: rgba(220, 38, 38, 0.3);
 }
-
 :root.dark .auth-success {
-  background: rgba(63, 185, 80, 0.1);
-  border-color: rgba(63, 185, 80, 0.3);
-  color: #3fb950;
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.3);
 }
 
 /* ── Footer ── */
 :root.dark .footer {
-  background: #161b22;
-  border-top: 1px solid #30363d;
+    background: #111827;
+    border-top: 1px solid var(--color-border);
 }
 
-/* ── Section titles ── */
-:root.dark .section__title {
-  color: #e6edf3;
-}
-
-/* ── Subject card name ── */
-:root.dark .subject-card__name,
-:root.dark .how__heading,
-:root.dark .feature__title {
-  color: #e6edf3;
-}
-
-/* ── Nav logo ── */
-:root.dark .nav__logo {
-  color: #e6edf3;
-}
-
-:root.dark .nav__logo span {
-  color: #f0883e;
-}
-
-/* ── Theme toggle ── */
+/* ── Dark mode toggle button in nav ── */
 .theme-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.1rem;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-  transition: background var(--transition);
-  line-height: 1;
-  color: var(--color-white);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition);
+    line-height: 1;
+    color: var(--color-white);
 }
-
 .theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* ── Scrollbar ── */
-:root.dark ::-webkit-scrollbar-track {
-  background: #0d1117;
-}
-
-:root.dark ::-webkit-scrollbar-thumb {
-  background: #30363d;
-}
-
-:root.dark ::-webkit-scrollbar-thumb:hover {
-  background: #3fb950;
-}
-
-/* ── Text selection ── */
-:root.dark ::selection {
-  background: #238636;
-  color: #ffffff;
-}
-
-/* ── Danger button ── */
-:root.dark .btn--danger {
-  color: #f85149;
-  border-color: rgba(248, 81, 73, 0.3);
-}
-
-:root.dark .btn--danger:hover {
-  background: rgba(248, 81, 73, 0.1);
-  border-color: #f85149;
-}
-
-/* ── Empty state ── */
-:root.dark .history-empty__title,
-:root.dark .notfound__title {
-  color: #e6edf3;
-}
-
-/* ── Quit button ── */
-:root.dark #quitBtn {
-  border-color: #30363d;
-  color: #e6edf3;
-}
-
-:root.dark #quitBtn:hover {
-  background: #21262d;
+    background: rgba(255, 255, 255, 0.12);
 }
 
 /* ── 2. Reset ── */
