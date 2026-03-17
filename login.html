@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | QuizPrep</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="auth-page">
+
+  <!-- ── Navigation ── -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="nav__logo">Quiz<span>Prep</span></a>
+    </div>
+  </nav>
+
+  <main class="auth-main">
+    <div class="auth-card">
+
+      <!-- Header -->
+      <div class="auth-card__header">
+        <div class="auth-icon">🎓</div>
+        <h1 class="auth-card__title">Welcome Back</h1>
+        <p class="auth-card__sub">Log in to continue practising</p>
+      </div>
+
+      <!-- Error banner — hidden by default -->
+      <div class="auth-error hidden" id="loginError"></div>
+
+      <!-- Form -->
+      <div class="auth-form" id="loginForm">
+
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email Address</label>
+          <input
+            class="form-input"
+            type="email"
+            id="loginEmail"
+            placeholder="you@example.com"
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <div class="input-wrap">
+            <input
+              class="form-input"
+              type="password"
+              id="loginPassword"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+            >
+            <button class="toggle-pw" type="button"
+                    onclick="togglePassword('loginPassword', this)">
+              👁
+            </button>
+          </div>
+        </div>
+
+        <button class="btn btn--primary btn--full" id="loginBtn">
+          Log In
+        </button>
+
+      </div>
+
+      <!-- Footer link -->
+      <p class="auth-card__footer">
+        Don't have an account?
+        <a href="register.html" class="auth-link">Create one</a>
+      </p>
+
+    </div>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Initialise the login form behaviour
+    initLogin();
+  </script>
+</body>
+</html>
