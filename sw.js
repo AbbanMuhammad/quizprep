@@ -1,9 +1,9 @@
 // =============================================
 //  QUIZPREP — Service Worker
-//  v3: auth pages removed
+//  v6: latest
 // =============================================
 
-const CACHE_VERSION = 'quizprep-v5';
+const CACHE_VERSION = 'quizprep-v6';
 
 const FILES_TO_CACHE = [
   './',
@@ -31,7 +31,7 @@ const FILES_TO_CACHE = [
 
 // ── Install ──────────────────────────────────
 self.addEventListener('install', function(event) {
-  console.log('[SW] Installing v3...');
+  console.log('[SW] Installing v6...');
   event.waitUntil(
     caches.open(CACHE_VERSION)
       .then(function(cache) {
@@ -45,7 +45,7 @@ self.addEventListener('install', function(event) {
 
 // ── Activate ─────────────────────────────────
 self.addEventListener('activate', function(event) {
-  console.log('[SW] Activating v3...');
+  console.log('[SW] Activating v6...');
   event.waitUntil(
     caches.keys().then(function(names) {
       return Promise.all(
@@ -69,7 +69,7 @@ self.addEventListener('fetch', function(event) {
   if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith(self.location.origin)) return;
 
-  var url = event.request.url;
+  var url    = event.request.url;
   var isHTML = url.endsWith('.html') || url.endsWith('/');
 
   if (isHTML) {
@@ -81,14 +81,12 @@ self.addEventListener('fetch', function(event) {
             throw new Error('Network response not ok');
           }
           var clone = response.clone();
-          caches.open(CACHE_VERSION)
-            .then(function(cache) {
-              cache.put(event.request, clone);
-            });
+          caches.open(CACHE_VERSION).then(function(cache) {
+            cache.put(event.request, clone);
+          });
           return response;
         })
         .catch(function() {
-          // Fallback to cache if network fails
           return caches.match(event.request);
         })
     );
@@ -102,10 +100,9 @@ self.addEventListener('fetch', function(event) {
           .then(function(response) {
             if (!response || response.status !== 200) return response;
             var clone = response.clone();
-            caches.open(CACHE_VERSION)
-              .then(function(cache) {
-                cache.put(event.request, clone);
-              });
+            caches.open(CACHE_VERSION).then(function(cache) {
+              cache.put(event.request, clone);
+            });
             return response;
           })
           .catch(function() {
