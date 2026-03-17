@@ -1,0 +1,6 @@
+/quiz-select    /quiz-select.html   200
+/quiz           /quiz.html          200
+/results        /results.html       200
+/history        /history.html       200
+/404            /404.html           200
+/*              /404.html           404
