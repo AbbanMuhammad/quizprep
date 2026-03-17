@@ -6,9 +6,6 @@
 // ─────────────────────────────────────────────
 //  1. LOAD RESULTS FROM SESSIONSTORAGE
 // ─────────────────────────────────────────────
-const currentUser = JSON.parse(localStorage.getItem('qp_current') || 'null');
-if (!currentUser) { window.location.href = 'login.html'; }
-updateNav();
 
 // Read the results object that quiz.js saved on submit
 const stored = sessionStorage.getItem('quizResults');
